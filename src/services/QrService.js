@@ -76,6 +76,25 @@ export const QrService = {
   },
 
   /**
+   * Ensure an invoice has a QR IMAGE to display. If it already has an image, no-op. If it has
+   * QR *content* (e.g. extracted from the original invoice / UBL) but no image, draw the image
+   * from that same content — this is rendering the existing payload, not creating a new one.
+   * Returns true if an image is now available.
+   */
+  async ensureImage(invoice) {
+    if (!invoice) return false;
+    if (invoice.qrImageDataUrl) return true;
+    if (!invoice.qrContent) return false;
+    try {
+      const { imageDataUrl } = await this.regenerate(invoice.qrContent);
+      invoice.qrImageDataUrl = imageDataUrl;
+      return true;
+    } catch {
+      return false; // offline / lib unavailable — template shows placeholder
+    }
+  },
+
+  /**
    * Option 4: (re)generate a QR image from content. Only called on explicit user action.
    * Preserves the SAME content string that was extracted from the original invoice.
    */

@@ -11,6 +11,7 @@ import { getSampleInvoice } from '../utils/sample.js';
 import { toast } from '../components/Toast.js';
 import { Modal } from '../components/Modal.js';
 import { LogoUploader } from '../components/LogoUploader.js';
+import { QrService } from '../services/QrService.js';
 
 export async function PreviewPage(params = {}) {
   const el = h('div', { class: 'max-w-6xl mx-auto px-4 py-6' });
@@ -22,6 +23,9 @@ export async function PreviewPage(params = {}) {
   let template;
   try { template = await TemplateService.get(templateId); }
   catch { template = await TemplateService.get('corporate-blue'); }
+
+  // Draw the QR image from its (preserved) content if we only have content so far.
+  await QrService.ensureImage(invoice);
 
   const stage = h('div', { class: 'preview-stage' });
   let view = 'a4';

@@ -3,7 +3,7 @@
  * Strategy: cache-first for same-origin app shell; network-first (with cache fallback) for
  * everything else (incl. CDN libs & fonts). Bump CACHE_VERSION when shipping changes.
  */
-const CACHE_VERSION = 'its-v1';
+const CACHE_VERSION = 'its-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -30,28 +30,17 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Network-first for everything: always serve the latest deploy when online, fall back to the
+// cache only when offline. This avoids serving stale JS/CSS after an update (the previous
+// cache-first strategy for same-origin caused old code to persist between deploys).
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
-  const sameOrigin = new URL(req.url).origin === self.location.origin;
-
-  if (sameOrigin) {
-    // Cache-first for app shell / local modules & assets.
-    event.respondWith(
-      caches.match(req).then((cached) => cached || fetch(req).then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE_VERSION).then((c) => c.put(req, copy)).catch(() => {});
-        return res;
-      }).catch(() => cached)),
-    );
-  } else {
-    // Network-first for CDN libs/fonts, fall back to cache when offline.
-    event.respondWith(
-      fetch(req).then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE_VERSION).then((c) => c.put(req, copy)).catch(() => {});
-        return res;
-      }).catch(() => caches.match(req)),
-    );
-  }
+  event.respondWith(
+    fetch(req).then((res) => {
+      const copy = res.clone();
+      caches.open(CACHE_VERSION).then((c) => c.put(req, copy)).catch(() => {});
+      return res;
+    }).catch(() => caches.match(req)),
+  );
 });

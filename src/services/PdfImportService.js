@@ -7,6 +7,7 @@
  */
 import { CDN } from '../core/config.js';
 import { parseInvoiceText } from './parsers/fieldParser.js';
+import { parseUblInvoice } from './parsers/ublParser.js';
 
 let _pdfjs = null;
 async function getPdfjs() {
@@ -23,17 +24,45 @@ async function loadDoc(file) {
   return pdfjs.getDocument({ data }).promise;
 }
 
+/**
+ * ZATCA Phase-2 PDFs (PDF/A-3) embed the full UBL invoice XML as an attachment.
+ * If present, return the exact, complete data parsed from it.
+ */
+async function extractEmbeddedUbl(doc) {
+  let attachments = null;
+  try { attachments = await doc.getAttachments(); } catch { return null; }
+  if (!attachments) return null;
+  const dec = new TextDecoder('utf-8');
+  for (const name of Object.keys(attachments)) {
+    const content = attachments[name]?.content;
+    if (!content) continue;
+    const str = dec.decode(content);
+    if (str.includes('<Invoice') || /\.xml$/i.test(name)) {
+      const ubl = parseUblInvoice(str);
+      if (ubl) return ubl;
+    }
+  }
+  return null;
+}
+
 export const PdfImportService = {
-  /** Extract all text and parse invoice fields. Returns the fieldParser result. */
+  /**
+   * Extract invoice data. Prefers embedded UBL XML (complete & exact); otherwise falls back
+   * to text heuristics. Returns { mode:'ubl'|'text', payload, found, items?, qrContent?, rawText? }.
+   */
   async extract(file) {
     const doc = await loadDoc(file);
+
+    const ubl = await extractEmbeddedUbl(doc);
+    if (ubl) return ubl;
+
     let text = '';
     for (let p = 1; p <= doc.numPages; p++) {
       const page = await doc.getPage(p);
       const content = await page.getTextContent();
       text += content.items.map((i) => i.str).join(' ') + '\n';
     }
-    return parseInvoiceText(text);
+    return { mode: 'text', ...parseInvoiceText(text) };
   },
 
   /** Render the first (or given) page to a canvas — used to scan an embedded QR. */

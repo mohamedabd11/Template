@@ -52,10 +52,21 @@ export async function ImportPage() {
     if (active === 1) {
       const out = h('div', { class: 'mt-4' });
       panel.append(
-        FileDrop({ accept: 'application/pdf', label: 'اسحب ملف PDF للفاتورة أو انقر للاختيار', hint: 'سيحاول النظام استخراج رقم الفاتورة، التاريخ، العميل والإجماليات', onFile: async (f) => {
+        FileDrop({ accept: 'application/pdf', label: 'اسحب ملف PDF للفاتورة أو انقر للاختيار', hint: 'فواتير ZATCA: يُستخرج XML المدمج كاملاً. غير ذلك: استخراج تقريبي للمراجعة', onFile: async (f) => {
           pdfFile = f; clear(out); out.appendChild(Spinner('جارٍ قراءة ملف PDF…'));
-          try { const res = await ImportService.fromPdf(f); showReview(out, res, 'pdf'); }
-          catch (e) { clear(out); out.appendChild(h('div', { class: 'text-rose-500 text-sm' }, 'تعذر قراءة الملف: ' + e.message)); }
+          try {
+            const res = await ImportService.fromPdf(f);
+            if (res.mode === 'ubl') {
+              // Complete, exact data from embedded ZATCA XML — build the invoice directly.
+              const inv = ImportService.buildFromReviewed(res.payload, 'pdf');
+              clear(out);
+              out.appendChild(h('div', { class: 'text-emerald-600 text-sm font-semibold mb-3' },
+                `✅ تم استخراج الفاتورة كاملة من XML المدمج (${res.items.length} بند). يمكنك المتابعة للمعاينة.`));
+              out.appendChild(h('button', { class: 'btn-primary', onClick: () => finish(inv) }, 'متابعة إلى المعاينة'));
+            } else {
+              showReview(out, res, 'pdf');
+            }
+          } catch (e) { clear(out); out.appendChild(h('div', { class: 'text-rose-500 text-sm' }, 'تعذر قراءة الملف: ' + e.message)); }
         } }),
         out,
       );
