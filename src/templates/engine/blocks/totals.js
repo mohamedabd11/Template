@@ -3,27 +3,30 @@
  * Always reflects the invoice's (possibly original) figures; never recomputes source totals.
  */
 import { esc } from '../../../utils/dom.js';
+import { bl, blText } from '../labels.js';
 
 function lines(c) {
   const inv = c.invoice;
   const rows = [
-    ['الإجمالي قبل الضريبة', c.money(inv.subtotal)],
-    inv.discountTotal ? ['الخصم', `- ${c.money(inv.discountTotal)}`] : null,
-    ['ضريبة القيمة المضافة (15%)', c.money(inv.taxTotal)],
+    [bl('subtotal'), c.money(inv.subtotal)],
+    inv.discountTotal ? [bl('discount'), `- ${c.money(inv.discountTotal)}`] : null,
+    [bl('vat15'), c.money(inv.taxTotal)],
   ].filter(Boolean);
   return rows;
 }
 
 function inWords(c) {
-  return `<div class="tot-words"><span>المبلغ كتابةً:</span> ${esc(c.tafqeet(c.invoice.grandTotal))}</div>`;
+  return `<div class="tot-words"><span>${blText('amountInWords')}:</span> ${esc(c.tafqeet(c.invoice.grandTotal))}</div>`;
 }
+
+const DUE = bl('totalDue');
 
 export const totalsBlocks = {
   // Boxed block aligned to the right with a highlighted grand-total row.
   'boxed-right': (c) => `
     <div class="tot tot--boxed">
       ${lines(c).map(([k, v]) => `<div class="tot-line"><span>${k}</span><b>${v}</b></div>`).join('')}
-      <div class="tot-grand"><span>الإجمالي المستحق</span><b>${c.money(c.invoice.grandTotal)}</b></div>
+      <div class="tot-grand"><span>${DUE}</span><b>${c.money(c.invoice.grandTotal)}</b></div>
       ${inWords(c)}
     </div>`,
 
@@ -31,7 +34,7 @@ export const totalsBlocks = {
   'stacked-card': (c) => `
     <div class="tot tot--card">
       <div class="tot-card-grand">
-        <div class="tot-card-label">الإجمالي المستحق</div>
+        <div class="tot-card-label">${DUE}</div>
         <div class="tot-card-value">${c.money(c.invoice.grandTotal)}</div>
       </div>
       <div class="tot-card-lines">
@@ -46,7 +49,7 @@ export const totalsBlocks = {
       <div class="tot-bar-lines">
         ${lines(c).map(([k, v]) => `<div class="tot-line"><span>${k}</span><b>${v}</b></div>`).join('')}
       </div>
-      <div class="tot-bar-grand"><span>الإجمالي المستحق</span><b>${c.money(c.invoice.grandTotal)}</b></div>
+      <div class="tot-bar-grand"><span>${DUE}</span><b>${c.money(c.invoice.grandTotal)}</b></div>
       ${inWords(c)}
     </div>`,
 
@@ -55,7 +58,7 @@ export const totalsBlocks = {
     <div class="tot tot--ledger">
       <table>
         ${lines(c).map(([k, v]) => `<tr><td>${k}</td><td class="tot-num">${v}</td></tr>`).join('')}
-        <tr class="tot-ledger-grand"><td>الإجمالي المستحق</td><td class="tot-num">${c.money(c.invoice.grandTotal)}</td></tr>
+        <tr class="tot-ledger-grand"><td>${DUE}</td><td class="tot-num">${c.money(c.invoice.grandTotal)}</td></tr>
       </table>
       ${inWords(c)}
     </div>`,
@@ -65,7 +68,7 @@ export const totalsBlocks = {
     <div class="tot tot--gold">
       <div class="tot-gold-inner">
         ${lines(c).map(([k, v]) => `<div class="tot-line"><span>${k}</span><b>${v}</b></div>`).join('')}
-        <div class="tot-grand"><span>الإجمالي المستحق</span><b>${c.money(c.invoice.grandTotal)}</b></div>
+        <div class="tot-grand"><span>${DUE}</span><b>${c.money(c.invoice.grandTotal)}</b></div>
       </div>
       ${inWords(c)}
     </div>`,

@@ -26,6 +26,12 @@
   font-family: var(--font-heading, 'Cairo'), var(--font-base), sans-serif;
 }
 
+/* Bilingual (Arabic primary / English secondary) labels */
+.bl-en { font-weight: 400; font-size: .8em; opacity: .62; margin-inline-start: 5px; unicode-bidi: isolate; }
+.tbl th .bl-en { display: block; margin: 1px 0 0; line-height: 1.2; }
+.cust-label .bl-en, .cust-box-head .bl-en { opacity: .7; }
+.ft-thanks-en { font-size: 8.5pt; color: var(--c-muted); letter-spacing: .02em; margin-top: 1px; }
+
 .inv-header, .inv-customer, .inv-body, .inv-summary { padding-inline: var(--pad); }
 .inv-customer { margin-top: 8mm; }
 .inv-body { margin-top: 6mm; flex: 1; }

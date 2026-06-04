@@ -4,6 +4,7 @@
  * QrService). This block only presents it; it never invents a new payload here.
  */
 import { esc } from '../../../utils/dom.js';
+import { T } from '../labels.js';
 
 function img(c) {
   if (c.qr.imageDataUrl) return `<img class="qr-img" src="${esc(c.qr.imageDataUrl)}" alt="QR">`;
@@ -18,11 +19,11 @@ export const qrBlocks = {
 
   'circle-badge': (c) => `<div class="qr qr--circle"><div class="qr-circle">${img(c)}</div></div>`,
 
-  corner: (c) => `<div class="qr qr--corner">${img(c)}<span class="qr-corner-tag">امسح للتحقق</span></div>`,
+  corner: (c) => `<div class="qr qr--corner">${img(c)}<span class="qr-corner-tag">${T.scanVerify[0]} · ${T.scanVerify[1]}</span></div>`,
 
   captioned: (c) => `
     <div class="qr qr--captioned">
       ${img(c)}
-      <div class="qr-caption">امسح الرمز للتحقق من الفاتورة الضريبية</div>
+      <div class="qr-caption">${T.scanCaption[0]}<br>${T.scanCaption[1]}</div>
     </div>`,
 };

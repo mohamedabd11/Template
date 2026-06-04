@@ -2,6 +2,7 @@
  * Footer block variants.
  */
 import { esc } from '../../../utils/dom.js';
+import { blText, T } from '../labels.js';
 
 function notes(c) {
   return c.invoice.notes ? `<div class="ft-notes">${esc(c.invoice.notes)}</div>` : '';
@@ -27,7 +28,8 @@ export const footerBlocks = {
   'centered-note': (c) => `
     <div class="ft ft--note">
       ${notes(c)}
-      <div class="ft-thanks">شكراً لتعاملكم معنا</div>
+      <div class="ft-thanks">${T.thanks[0]}</div>
+      <div class="ft-thanks-en">${T.thanks[1]}</div>
       <div class="ft-contact">${contact(c)}</div>
     </div>`,
 
@@ -36,8 +38,8 @@ export const footerBlocks = {
     <div class="ft ft--sig">
       ${notes(c)}
       <div class="ft-sig-row">
-        <div class="ft-sig-box"><span>التوقيع</span></div>
-        <div class="ft-sig-box ft-stamp"><span>الختم</span></div>
+        <div class="ft-sig-box"><span>${blText('signature')}</span></div>
+        <div class="ft-sig-box ft-stamp"><span>${blText('stamp')}</span></div>
       </div>
       <div class="ft-contact">${contact(c)}</div>
     </div>`,
@@ -54,6 +56,6 @@ export const footerBlocks = {
   gradient: (c) => `
     <div class="ft ft--gradient">
       ${notes(c)}
-      <div class="ft-grad-row"><span>شكراً لاختياركم ${esc(c.invoice.company.name || '')}</span><span>${contact(c)}</span></div>
+      <div class="ft-grad-row"><span>${T.thanks[0]} · ${T.thanks[1]}</span><span>${contact(c)}</span></div>
     </div>`,
 };

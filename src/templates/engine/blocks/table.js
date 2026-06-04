@@ -2,6 +2,7 @@
  * Items table variants — different table shapes. All read `template.columns` for column config.
  */
 import { esc } from '../../../utils/dom.js';
+import { colLabel } from '../labels.js';
 
 function cellValue(col, item, idx, c) {
   switch (col.key) {
@@ -26,7 +27,7 @@ function buildRows(c, rowClassFn = () => '') {
 }
 
 function head(c) {
-  return `<tr>${c.columns.map((col) => `<th style="text-align:${col.align || 'right'};width:${col.width || 'auto'}">${esc(col.label)}</th>`).join('')}</tr>`;
+  return `<tr>${c.columns.map((col) => `<th style="text-align:${col.align || 'right'};width:${col.width || 'auto'}">${colLabel(col.key, esc(col.label))}</th>`).join('')}</tr>`;
 }
 
 export const tableBlocks = {

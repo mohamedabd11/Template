@@ -4,6 +4,7 @@
  * scoped CSS then applies its visual identity.
  */
 import { esc } from '../../../utils/dom.js';
+import { bl, T } from '../labels.js';
 
 function logo(c) {
   const co = c.invoice.company;
@@ -19,8 +20,8 @@ function companyBlock(c) {
     <div class="hd-company">
       <div class="hd-name">${esc(co.name || 'اسم المنشأة')}</div>
       ${co.nameEn ? `<div class="hd-name-en">${esc(co.nameEn)}</div>` : ''}
-      ${co.vatNumber ? `<div class="hd-meta">الرقم الضريبي: ${esc(co.vatNumber)}</div>` : ''}
-      ${co.crNumber ? `<div class="hd-meta">سجل تجاري: ${esc(co.crNumber)}</div>` : ''}
+      ${co.vatNumber ? `<div class="hd-meta">${T.vatNo[0]} / ${T.vatNo[1]}: ${esc(co.vatNumber)}</div>` : ''}
+      ${co.crNumber ? `<div class="hd-meta">${T.crNo[0]} / ${T.crNo[1]}: ${esc(co.crNumber)}</div>` : ''}
       ${co.address ? `<div class="hd-meta">${esc(co.address)}</div>` : ''}
       ${co.phone ? `<div class="hd-meta">${esc(co.phone)}</div>` : ''}
     </div>`;
@@ -33,10 +34,10 @@ function titleBlock(c) {
       <div class="hd-doctype">فاتورة ضريبية</div>
       <div class="hd-doctype-en">TAX INVOICE</div>
       <dl class="hd-fields">
-        <div><dt>رقم الفاتورة</dt><dd>${esc(inv.invoiceNumber || '—')}</dd></div>
-        <div><dt>التاريخ</dt><dd>${esc(c.date(inv.date) || '—')}</dd></div>
-        ${inv.dueDate ? `<div><dt>الاستحقاق</dt><dd>${esc(c.date(inv.dueDate))}</dd></div>` : ''}
-        ${inv.poNumber ? `<div><dt>أمر الشراء</dt><dd>${esc(inv.poNumber)}</dd></div>` : ''}
+        <div><dt>${bl('invoiceNo')}</dt><dd>${esc(inv.invoiceNumber || '—')}</dd></div>
+        <div><dt>${bl('date')}</dt><dd>${esc(c.date(inv.date) || '—')}</dd></div>
+        ${inv.dueDate ? `<div><dt>${bl('dueDate')}</dt><dd>${esc(c.date(inv.dueDate))}</dd></div>` : ''}
+        ${inv.poNumber ? `<div><dt>${bl('po')}</dt><dd>${esc(inv.poNumber)}</dd></div>` : ''}
       </dl>
     </div>`;
 }
@@ -118,7 +119,7 @@ export const headerBlocks = {
     <div class="hd hd--minimal">
       <div class="hd-min-row">
         <div class="hd-brand">${logo(c)}<span class="hd-name">${esc(c.invoice.company.name || 'المنشأة')}</span></div>
-        <div class="hd-min-doc">فاتورة ضريبية · ${esc(c.invoice.invoiceNumber || '')}</div>
+        <div class="hd-min-doc">${T.taxInvoice[0]} · ${T.taxInvoice[1]} · ${esc(c.invoice.invoiceNumber || '')}</div>
       </div>
       <div class="hd-min-sub">${esc(c.date(c.invoice.date))}</div>
     </div>`,
