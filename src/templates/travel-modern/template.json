@@ -1,0 +1,82 @@
+{
+  "id": "travel-modern",
+  "name": "سياحة مودرن",
+  "nameEn": "Travel Agency Modern",
+  "category": "Travel Agency",
+  "tags": [
+    "travel",
+    "modern",
+    "vibrant"
+  ],
+  "builtin": true,
+  "theme": {
+    "text": "#0f172a",
+    "muted": "#64748b",
+    "bg": "#ffffff",
+    "primary": "#0284c7",
+    "accent": "#f43f5e",
+    "line": "#d8eaf5"
+  },
+  "fonts": {
+    "base": "Tajawal",
+    "heading": "Cairo"
+  },
+  "layout": {
+    "header": {
+      "variant": "hero"
+    },
+    "customer": {
+      "variant": "inline-strip"
+    },
+    "table": {
+      "variant": "pill"
+    },
+    "totals": {
+      "variant": "highlight-bar"
+    },
+    "qr": {
+      "variant": "circle-badge"
+    },
+    "footer": {
+      "variant": "gradient"
+    }
+  },
+  "columns": [
+    {
+      "key": "index",
+      "label": "#",
+      "align": "center",
+      "width": "6%"
+    },
+    {
+      "key": "description",
+      "label": "البيان",
+      "align": "right",
+      "width": "40%"
+    },
+    {
+      "key": "qty",
+      "label": "الكمية",
+      "align": "center",
+      "width": "12%"
+    },
+    {
+      "key": "unitPrice",
+      "label": "سعر الوحدة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "taxAmount",
+      "label": "الضريبة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "total",
+      "label": "الإجمالي",
+      "align": "center",
+      "width": "14%"
+    }
+  ]
+}

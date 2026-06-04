@@ -1,0 +1,82 @@
+{
+  "id": "modern-minimal",
+  "name": "مودرن مينيمال",
+  "nameEn": "Modern Minimal",
+  "category": "Modern",
+  "tags": [
+    "modern",
+    "minimal",
+    "mono"
+  ],
+  "builtin": true,
+  "theme": {
+    "text": "#0f172a",
+    "muted": "#64748b",
+    "bg": "#ffffff",
+    "primary": "#111827",
+    "accent": "#111827",
+    "line": "#ececec"
+  },
+  "fonts": {
+    "base": "IBM Plex Sans Arabic",
+    "heading": "IBM Plex Sans Arabic"
+  },
+  "layout": {
+    "header": {
+      "variant": "minimal-line"
+    },
+    "customer": {
+      "variant": "inline-strip"
+    },
+    "table": {
+      "variant": "minimal-lines"
+    },
+    "totals": {
+      "variant": "stacked-card"
+    },
+    "qr": {
+      "variant": "plain"
+    },
+    "footer": {
+      "variant": "centered-note"
+    }
+  },
+  "columns": [
+    {
+      "key": "index",
+      "label": "#",
+      "align": "center",
+      "width": "6%"
+    },
+    {
+      "key": "description",
+      "label": "البيان",
+      "align": "right",
+      "width": "40%"
+    },
+    {
+      "key": "qty",
+      "label": "الكمية",
+      "align": "center",
+      "width": "12%"
+    },
+    {
+      "key": "unitPrice",
+      "label": "سعر الوحدة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "taxAmount",
+      "label": "الضريبة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "total",
+      "label": "الإجمالي",
+      "align": "center",
+      "width": "14%"
+    }
+  ]
+}

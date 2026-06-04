@@ -1,0 +1,113 @@
+/**
+ * ImportPage — 4 input methods (manual / PDF / image / JSON) + QR panel. Builds the current
+ * Invoice in the store, then routes to preview.
+ */
+import { h, clear } from '../utils/dom.js';
+import { ImportService } from '../services/ImportService.js';
+import { store } from '../core/store.js';
+import { InvoiceForm } from '../components/InvoiceForm.js';
+import { ReviewPanel } from '../components/ReviewPanel.js';
+import { QrPanel } from '../components/QrPanel.js';
+import { FileDrop } from '../components/FileDrop.js';
+import { Spinner } from '../components/Spinner.js';
+import { toast } from '../components/Toast.js';
+
+export async function ImportPage() {
+  const el = h('div', { class: 'max-w-5xl mx-auto px-4 py-6' });
+  let pdfFile = null;
+
+  const tabs = ['يدوي', 'استيراد PDF', 'رفع صورة', 'استيراد JSON'];
+  let active = 0;
+  const tabBar = h('div', { class: 'flex gap-1 bg-slate-100 p-1 rounded-xl w-fit mb-5' });
+  const panel = h('div', {});
+
+  function setTab(i) { active = i; tabBar.querySelectorAll('button').forEach((b, idx) => b.classList.toggle('is-active', idx === i)); renderPanel(); }
+  tabs.forEach((t, i) => tabBar.appendChild(h('button', { class: 'tab-btn', onClick: () => setTab(i) }, t)));
+
+  function finish(invoice, qr) {
+    if (qr?.content) invoice.qrContent = qr.content;
+    if (qr?.imageDataUrl) invoice.qrImageDataUrl = qr.imageDataUrl;
+    // also pull any QR set into the store via QrPanel
+    invoice.qrContent = invoice.qrContent || store.get('qrContent');
+    invoice.qrImageDataUrl = invoice.qrImageDataUrl || store.get('qrImageDataUrl');
+    store.set('currentInvoice', invoice);
+    toast('تم تجهيز الفاتورة', 'success');
+    location.hash = '#/preview';
+  }
+
+  function renderPanel() {
+    clear(panel);
+
+    if (active === 0) {
+      const form = InvoiceForm(store.get('currentInvoice')?.toJSON() || {});
+      panel.append(form, h('div', { class: 'mt-4 flex gap-2' },
+        h('button', { class: 'btn-primary', onClick: () => {
+          const inv = ImportService.fromManual(form.read());
+          const v = inv.validate(); if (!v.valid) { toast(v.errors[0], 'error'); return; }
+          finish(inv);
+        } }, 'متابعة إلى المعاينة'),
+      ));
+    }
+
+    if (active === 1) {
+      const out = h('div', { class: 'mt-4' });
+      panel.append(
+        FileDrop({ accept: 'application/pdf', label: 'اسحب ملف PDF للفاتورة أو انقر للاختيار', hint: 'سيحاول النظام استخراج رقم الفاتورة، التاريخ، العميل والإجماليات', onFile: async (f) => {
+          pdfFile = f; clear(out); out.appendChild(Spinner('جارٍ قراءة ملف PDF…'));
+          try { const res = await ImportService.fromPdf(f); showReview(out, res, 'pdf'); }
+          catch (e) { clear(out); out.appendChild(h('div', { class: 'text-rose-500 text-sm' }, 'تعذر قراءة الملف: ' + e.message)); }
+        } }),
+        out,
+      );
+    }
+
+    if (active === 2) {
+      const out = h('div', { class: 'mt-4' });
+      panel.append(
+        FileDrop({ accept: 'image/png,image/jpeg', label: 'اسحب صورة الفاتورة (PNG/JPG) أو انقر للاختيار', hint: 'سيتم استخدام OCR لاستخراج البيانات ثم مراجعتها', onFile: async (f) => {
+          clear(out); const sp = Spinner('جارٍ تشغيل OCR… قد يستغرق لحظات'); out.appendChild(sp);
+          try { const res = await ImportService.fromImage(f, (p) => { sp.lastChild.textContent = `جارٍ التعرف… ${Math.round(p * 100)}%`; }); showReview(out, res, 'image'); }
+          catch (e) { clear(out); out.appendChild(h('div', { class: 'text-rose-500 text-sm' }, 'تعذر المعالجة: ' + e.message)); }
+        } }),
+        out,
+      );
+    }
+
+    if (active === 3) {
+      const ta = h('textarea', { class: 'w-full border border-slate-200 rounded-xl p-3 font-mono text-xs', rows: 12, placeholder: '{\n  "invoiceNumber": "INV-001",\n  "date": "2026-06-01",\n  "customer": "اسم العميل",\n  "items": [{ "description": "بند", "qty": 1, "unitPrice": 100 }]\n}' });
+      panel.append(
+        h('p', { class: 'text-sm text-slate-500 mb-2' }, 'الصق بيانات الفاتورة بصيغة JSON (تهيئة للتكامل مع أنظمة ERP):'),
+        ta,
+        h('div', { class: 'mt-3 flex gap-2' },
+          h('button', { class: 'btn-secondary', onClick: async () => { ta.value = await fetch(new URL('../../assets/sample-invoice.json', import.meta.url)).then((r) => r.text()); } }, 'تحميل مثال'),
+          h('button', { class: 'btn-primary', onClick: () => {
+            let res; try { res = ImportService.fromJson(ta.value); } catch (e) { toast('JSON غير صالح: ' + e.message, 'error'); return; }
+            if (!res.ok) { toast(res.errors[0], 'error'); return; }
+            finish(res.invoice);
+          } }, 'استيراد ومعاينة'),
+        ),
+      );
+    }
+  }
+
+  function showReview(out, res, source) {
+    clear(out);
+    const review = ReviewPanel(res);
+    out.append(review, h('div', { class: 'mt-4 flex gap-2' },
+      h('button', { class: 'btn-primary', onClick: () => {
+        const reviewed = review.read();
+        if (!reviewed.items.length) { toast('أضف بنود الفاتورة من التبويب اليدوي بعد المراجعة', 'warn'); }
+        finish(ImportService.buildFromReviewed(reviewed, source));
+      } }, 'تأكيد ومتابعة'),
+    ));
+  }
+
+  el.append(
+    h('h1', { class: 'text-2xl font-extrabold text-slate-800' }, 'إدخال / استيراد فاتورة'),
+    h('p', { class: 'text-slate-500 text-sm mb-5' }, 'أدخل الفاتورة يدوياً أو استوردها من PDF أو صورة أو JSON. لن يتم تعديل بياناتك الأصلية.'),
+    tabBar, panel,
+    h('div', { class: 'mt-6' }, QrPanel({ getPdfFile: () => pdfFile })),
+  );
+  setTab(0);
+  return { el };
+}

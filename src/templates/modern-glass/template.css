@@ -1,0 +1,4 @@
+/* Modern Glass — scoped identity */
+.tpl-modern-glass{}
+.tpl-modern-glass .cust--card{backdrop-filter:blur(6px);background:rgba(255,255,255,.6);border-color:rgba(99,102,241,.25);box-shadow:0 8px 30px rgba(99,102,241,.12);}
+.tpl-modern-glass .tot--card{box-shadow:0 10px 30px rgba(168,85,247,.18);}

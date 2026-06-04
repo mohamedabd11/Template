@@ -1,0 +1,125 @@
+/**
+ * Header block variants. Each returns an HTML string for `.inv-header`.
+ * Variants differ structurally (layout, logo placement, title style) — the template's
+ * scoped CSS then applies its visual identity.
+ */
+import { esc } from '../../../utils/dom.js';
+
+function logo(c) {
+  const co = c.invoice.company;
+  if (co.logoDataUrl) return `<img class="hd-logo" src="${esc(co.logoDataUrl)}" alt="logo">`;
+  // Fallback monogram from company name initial.
+  const initial = esc((co.name || co.nameEn || '؟').trim().charAt(0));
+  return `<div class="hd-logo hd-logo--mono">${initial}</div>`;
+}
+
+function companyBlock(c) {
+  const co = c.invoice.company;
+  return `
+    <div class="hd-company">
+      <div class="hd-name">${esc(co.name || 'اسم المنشأة')}</div>
+      ${co.nameEn ? `<div class="hd-name-en">${esc(co.nameEn)}</div>` : ''}
+      ${co.vatNumber ? `<div class="hd-meta">الرقم الضريبي: ${esc(co.vatNumber)}</div>` : ''}
+      ${co.crNumber ? `<div class="hd-meta">سجل تجاري: ${esc(co.crNumber)}</div>` : ''}
+      ${co.address ? `<div class="hd-meta">${esc(co.address)}</div>` : ''}
+      ${co.phone ? `<div class="hd-meta">${esc(co.phone)}</div>` : ''}
+    </div>`;
+}
+
+function titleBlock(c) {
+  const inv = c.invoice;
+  return `
+    <div class="hd-title">
+      <div class="hd-doctype">فاتورة ضريبية</div>
+      <div class="hd-doctype-en">TAX INVOICE</div>
+      <dl class="hd-fields">
+        <div><dt>رقم الفاتورة</dt><dd>${esc(inv.invoiceNumber || '—')}</dd></div>
+        <div><dt>التاريخ</dt><dd>${esc(c.date(inv.date) || '—')}</dd></div>
+        ${inv.dueDate ? `<div><dt>الاستحقاق</dt><dd>${esc(c.date(inv.dueDate))}</dd></div>` : ''}
+        ${inv.poNumber ? `<div><dt>أمر الشراء</dt><dd>${esc(inv.poNumber)}</dd></div>` : ''}
+      </dl>
+    </div>`;
+}
+
+export const headerBlocks = {
+  // Colored band: logo on the right, title block on the left, company beneath.
+  band: (c) => `
+    <div class="hd hd--band">
+      <div class="hd-band-top">
+        <div class="hd-brand">${logo(c)}${companyBlock(c)}</div>
+        ${titleBlock(c)}
+      </div>
+    </div>`,
+
+  // Split header: company left, title right, divider between.
+  split: (c) => `
+    <div class="hd hd--split">
+      <div class="hd-side hd-side--brand">${logo(c)}${companyBlock(c)}</div>
+      <div class="hd-divider"></div>
+      <div class="hd-side hd-side--title">${titleBlock(c)}</div>
+    </div>`,
+
+  // Centered: logo + company centered on top, title centered beneath.
+  centered: (c) => `
+    <div class="hd hd--centered">
+      <div class="hd-center-brand">${logo(c)}${companyBlock(c)}</div>
+      ${titleBlock(c)}
+    </div>`,
+
+  // Stacked: title on top as a strip, company info below it.
+  stacked: (c) => `
+    <div class="hd hd--stacked">
+      ${titleBlock(c)}
+      <div class="hd-stacked-brand">${logo(c)}${companyBlock(c)}</div>
+    </div>`,
+
+  // Sidebar: a vertical colored rail with the logo, content beside it.
+  sidebar: (c) => `
+    <div class="hd hd--sidebar">
+      <div class="hd-rail">${logo(c)}</div>
+      <div class="hd-rail-content">${companyBlock(c)}${titleBlock(c)}</div>
+    </div>`,
+
+  // Hero: full-width gradient banner with large title.
+  hero: (c) => `
+    <div class="hd hd--hero">
+      <div class="hd-hero-bg"></div>
+      <div class="hd-hero-inner">
+        <div class="hd-brand">${logo(c)}${companyBlock(c)}</div>
+        ${titleBlock(c)}
+      </div>
+    </div>`,
+
+  // Dark bar: dark solid header, light text, accent underline.
+  darkbar: (c) => `
+    <div class="hd hd--darkbar">
+      <div class="hd-brand">${logo(c)}${companyBlock(c)}</div>
+      ${titleBlock(c)}
+    </div>`,
+
+  // Ribbon: luxury — thin top rule, centered serif title, gold ribbon corner.
+  ribbon: (c) => `
+    <div class="hd hd--ribbon">
+      <span class="hd-ribbon-corner"></span>
+      <div class="hd-brand">${logo(c)}${companyBlock(c)}</div>
+      ${titleBlock(c)}
+    </div>`,
+
+  // Blueprint: technical grid background with stamp-like title box.
+  blueprint: (c) => `
+    <div class="hd hd--blueprint">
+      <div class="hd-bp-grid"></div>
+      <div class="hd-brand">${logo(c)}${companyBlock(c)}</div>
+      <div class="hd-bp-stamp">${titleBlock(c)}</div>
+    </div>`,
+
+  // Minimal line: just a hairline rule, tiny logo, compact title.
+  'minimal-line': (c) => `
+    <div class="hd hd--minimal">
+      <div class="hd-min-row">
+        <div class="hd-brand">${logo(c)}<span class="hd-name">${esc(c.invoice.company.name || 'المنشأة')}</span></div>
+        <div class="hd-min-doc">فاتورة ضريبية · ${esc(c.invoice.invoiceNumber || '')}</div>
+      </div>
+      <div class="hd-min-sub">${esc(c.date(c.invoice.date))}</div>
+    </div>`,
+};

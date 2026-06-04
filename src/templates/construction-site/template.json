@@ -1,0 +1,82 @@
+{
+  "id": "construction-site",
+  "name": "إنشاءات موقع",
+  "nameEn": "Construction Site",
+  "category": "Construction",
+  "tags": [
+    "construction",
+    "site",
+    "hi-vis"
+  ],
+  "builtin": true,
+  "theme": {
+    "text": "#0f172a",
+    "muted": "#64748b",
+    "bg": "#ffffff",
+    "primary": "#a16207",
+    "accent": "#eab308",
+    "line": "#efe6c8"
+  },
+  "fonts": {
+    "base": "Cairo",
+    "heading": "Cairo"
+  },
+  "layout": {
+    "header": {
+      "variant": "sidebar"
+    },
+    "customer": {
+      "variant": "labeled-rows"
+    },
+    "table": {
+      "variant": "blueprint"
+    },
+    "totals": {
+      "variant": "ledger"
+    },
+    "qr": {
+      "variant": "corner"
+    },
+    "footer": {
+      "variant": "blueprint-strip"
+    }
+  },
+  "columns": [
+    {
+      "key": "index",
+      "label": "#",
+      "align": "center",
+      "width": "6%"
+    },
+    {
+      "key": "description",
+      "label": "البيان",
+      "align": "right",
+      "width": "40%"
+    },
+    {
+      "key": "qty",
+      "label": "الكمية",
+      "align": "center",
+      "width": "12%"
+    },
+    {
+      "key": "unitPrice",
+      "label": "سعر الوحدة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "taxAmount",
+      "label": "الضريبة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "total",
+      "label": "الإجمالي",
+      "align": "center",
+      "width": "14%"
+    }
+  ]
+}

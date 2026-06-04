@@ -1,0 +1,82 @@
+{
+  "id": "corporate-gray",
+  "name": "كوربوريت رمادي",
+  "nameEn": "Corporate Gray",
+  "category": "Corporate",
+  "tags": [
+    "corporate",
+    "gray",
+    "restrained"
+  ],
+  "builtin": true,
+  "theme": {
+    "text": "#0f172a",
+    "muted": "#64748b",
+    "bg": "#ffffff",
+    "primary": "#374151",
+    "accent": "#6b7280",
+    "line": "#e5e7eb"
+  },
+  "fonts": {
+    "base": "IBM Plex Sans Arabic",
+    "heading": "IBM Plex Sans Arabic"
+  },
+  "layout": {
+    "header": {
+      "variant": "stacked"
+    },
+    "customer": {
+      "variant": "labeled-rows"
+    },
+    "table": {
+      "variant": "minimal-lines"
+    },
+    "totals": {
+      "variant": "stacked-card"
+    },
+    "qr": {
+      "variant": "corner"
+    },
+    "footer": {
+      "variant": "signature-stamp"
+    }
+  },
+  "columns": [
+    {
+      "key": "index",
+      "label": "#",
+      "align": "center",
+      "width": "6%"
+    },
+    {
+      "key": "description",
+      "label": "البيان",
+      "align": "right",
+      "width": "40%"
+    },
+    {
+      "key": "qty",
+      "label": "الكمية",
+      "align": "center",
+      "width": "12%"
+    },
+    {
+      "key": "unitPrice",
+      "label": "سعر الوحدة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "taxAmount",
+      "label": "الضريبة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "total",
+      "label": "الإجمالي",
+      "align": "center",
+      "width": "14%"
+    }
+  ]
+}

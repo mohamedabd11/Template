@@ -1,0 +1,82 @@
+{
+  "id": "modern-glass",
+  "name": "مودرن زجاجي",
+  "nameEn": "Modern Glass",
+  "category": "Modern",
+  "tags": [
+    "modern",
+    "glass",
+    "gradient"
+  ],
+  "builtin": true,
+  "theme": {
+    "text": "#0f172a",
+    "muted": "#64748b",
+    "bg": "#ffffff",
+    "primary": "#6366f1",
+    "accent": "#a855f7",
+    "line": "#e7e7fb"
+  },
+  "fonts": {
+    "base": "Tajawal",
+    "heading": "Cairo"
+  },
+  "layout": {
+    "header": {
+      "variant": "hero"
+    },
+    "customer": {
+      "variant": "card"
+    },
+    "table": {
+      "variant": "pill"
+    },
+    "totals": {
+      "variant": "stacked-card"
+    },
+    "qr": {
+      "variant": "circle-badge"
+    },
+    "footer": {
+      "variant": "gradient"
+    }
+  },
+  "columns": [
+    {
+      "key": "index",
+      "label": "#",
+      "align": "center",
+      "width": "6%"
+    },
+    {
+      "key": "description",
+      "label": "البيان",
+      "align": "right",
+      "width": "40%"
+    },
+    {
+      "key": "qty",
+      "label": "الكمية",
+      "align": "center",
+      "width": "12%"
+    },
+    {
+      "key": "unitPrice",
+      "label": "سعر الوحدة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "taxAmount",
+      "label": "الضريبة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "total",
+      "label": "الإجمالي",
+      "align": "center",
+      "width": "14%"
+    }
+  ]
+}
