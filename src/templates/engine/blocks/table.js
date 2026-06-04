@@ -6,7 +6,7 @@ import { colLabel } from '../labels.js';
 
 function cellValue(col, item, idx, c) {
   switch (col.key) {
-    case 'index': return c.toArabicDigits(idx + 1);
+    case 'index': return String(idx + 1);
     case 'description': return esc(item.description);
     case 'qty': return c.num(item.qty);
     case 'unitPrice': return c.money(item.unitPrice, false);
