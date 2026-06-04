@@ -9,6 +9,8 @@ import { TemplateEngine } from '../templates/engine/TemplateEngine.js';
 import { ExportService } from '../services/ExportService.js';
 import { getSampleInvoice } from '../utils/sample.js';
 import { toast } from '../components/Toast.js';
+import { Modal } from '../components/Modal.js';
+import { LogoUploader } from '../components/LogoUploader.js';
 
 export async function PreviewPage(params = {}) {
   const el = h('div', { class: 'max-w-6xl mx-auto px-4 py-6' });
@@ -37,6 +39,26 @@ export async function PreviewPage(params = {}) {
     viewBtn('سطح المكتب', 'desktop'), viewBtn('A4', 'a4'), viewBtn('طباعة', 'print'));
   function sync() { viewBar.querySelectorAll('button').forEach((b) => b.classList.toggle('is-active', b.dataset.v === view)); }
 
+  // Attach / replace the organization logo on the current invoice (works for any source).
+  function openLogoDialog() {
+    const uploader = LogoUploader({
+      initial: invoice.company.logoDataUrl || '',
+      onChange: (dataUrl) => {
+        invoice.company.logoDataUrl = dataUrl;
+        if (!usingSample) store.set('currentInvoice', invoice); // persist live for real invoices
+        render();
+      },
+    });
+    Modal({
+      title: 'شعار المنشأة',
+      size: 'sm',
+      body: h('div', { class: 'space-y-3' },
+        h('p', { class: 'text-sm text-slate-500' }, 'ارفع شعار منشأتك ليظهر في ترويسة الفاتورة. يظهر التغيير فوراً في المعاينة.'),
+        uploader,
+      ),
+    });
+  }
+
   el.append(
     h('div', { class: 'flex flex-wrap items-center justify-between gap-3 mb-4' },
       h('div', {},
@@ -46,6 +68,7 @@ export async function PreviewPage(params = {}) {
       h('div', { class: 'flex items-center gap-2' },
         viewBar,
         h('button', { class: 'btn-secondary', onClick: () => location.hash = '#/gallery' }, 'تغيير القالب'),
+        h('button', { class: 'btn-secondary', onClick: openLogoDialog }, '🖼️ الشعار'),
         h('button', { class: 'btn-secondary', onClick: () => ExportService.print(node) }, '🖨️ طباعة'),
         h('button', { class: 'btn-primary', onClick: async () => {
           toast('جارٍ إنشاء PDF…'); try { await ExportService.toPdf(node, `${invoice.invoiceNumber || 'invoice'}.pdf`); toast('تم تنزيل PDF', 'success'); }

@@ -3,6 +3,7 @@
  * `read()` returns a plain payload suitable for `new Invoice(payload)`.
  */
 import { h } from '../utils/dom.js';
+import { LogoUploader } from './LogoUploader.js';
 
 function field(label, name, value = '', opts = {}) {
   return h('label', { class: 'block' },
@@ -39,8 +40,14 @@ export function InvoiceForm(initial = {}) {
 
   const grid = (...kids) => h('div', { class: 'grid grid-cols-1 sm:grid-cols-2 gap-3' }, ...kids);
 
+  const logoUploader = LogoUploader({ initial: co.logoDataUrl || '' });
+
   const el = h('div', { class: 'space-y-4' },
     section('بيانات المنشأة (المُصدِّر)',
+      h('div', { class: 'mb-3' },
+        h('span', { class: 'block text-xs font-semibold text-slate-500 mb-1' }, 'شعار المنشأة'),
+        logoUploader,
+      ),
       grid(
         field('اسم المنشأة', 'company.name', co.name),
         field('الاسم بالإنجليزية', 'company.nameEn', co.nameEn),
@@ -89,7 +96,7 @@ export function InvoiceForm(initial = {}) {
     return {
       invoiceNumber: val('invoiceNumber'), date: val('date'), dueDate: val('dueDate'),
       poNumber: val('poNumber'), notes: val('notes'),
-      company: { name: val('company.name'), nameEn: val('company.nameEn'), vatNumber: val('company.vatNumber'), crNumber: val('company.crNumber'), address: val('company.address'), phone: val('company.phone') },
+      company: { name: val('company.name'), nameEn: val('company.nameEn'), vatNumber: val('company.vatNumber'), crNumber: val('company.crNumber'), address: val('company.address'), phone: val('company.phone'), logoDataUrl: logoUploader.getLogo() },
       customer: { name: val('customer.name'), vatNumber: val('customer.vatNumber'), address: val('customer.address'), phone: val('customer.phone') },
       items,
     };
