@@ -18,7 +18,6 @@
   flex-direction: column;
   font-size: 11pt;
   line-height: 1.6;
-  overflow: hidden;
 }
 .invoice-page * { box-sizing: border-box; }
 .invoice-page h1, .invoice-page h2, .invoice-page h3,
@@ -56,13 +55,19 @@
 .hd-meta { font-size: 8.5pt; color: var(--c-muted); }
 
 /* ---------- Title block ---------- */
-.hd-title { text-align: left; }
-.hd-doctype { font-size: 18pt; font-weight: 800; color: var(--c-primary); }
+.hd-title { text-align: left; flex-shrink: 0; }
+.hd-doctype { font-size: 18pt; font-weight: 800; color: var(--c-primary); white-space: nowrap; }
 .hd-doctype-en { font-size: 8pt; letter-spacing: .25em; color: var(--c-muted); margin-bottom: 4px; }
 .hd-fields { display: grid; gap: 2px; margin: 0; }
 .hd-fields > div { display: flex; gap: 8px; justify-content: flex-start; font-size: 9pt; }
-.hd-fields dt { color: var(--c-muted); margin: 0; min-width: 70px; }
-.hd-fields dd { margin: 0; font-weight: 700; }
+.hd-fields dt { color: var(--c-muted); margin: 0; min-width: 64px; white-space: nowrap; }
+.hd-fields dd { margin: 0; font-weight: 700; white-space: nowrap; }
+
+/* Keep brand text from crushing the title; let long names/addresses wrap instead of clipping. */
+.hd-brand { min-width: 0; }
+.hd-company { min-width: 0; max-width: 95mm; }
+.hd-company .hd-name { overflow-wrap: anywhere; }
+.hd-meta { overflow-wrap: anywhere; word-break: break-word; }
 
 /* ---------- Header variants ---------- */
 .hd--band { background: var(--c-primary); color: #fff; padding: 8mm var(--pad); margin: 0 calc(-1 * var(--pad)); }
@@ -210,7 +215,7 @@
 /* ---------- Footer variants ---------- */
 .ft-notes { font-size: 8.5pt; color: var(--c-muted); margin-bottom: 6px; }
 .ft--bar { background: var(--c-primary); color: #fff; padding: 4mm var(--pad); margin: 6mm calc(-1 * var(--pad)) 0; }
-.ft--bar .ft-bar-row { display: flex; justify-content: space-between; font-size: 8.5pt; }
+.ft--bar .ft-bar-row { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; font-size: 8.5pt; }
 .ft--bar .ft-notes { color: rgba(255,255,255,.85); }
 
 .ft--note { text-align: center; padding: 5mm var(--pad); border-top: 1px solid var(--c-line); }
@@ -225,8 +230,8 @@
 
 .ft--blueprint { padding: 4mm var(--pad); }
 .ft--blueprint .ft-bp-line { height: 4px; background-image: repeating-linear-gradient(90deg, var(--c-primary) 0 8px, transparent 8px 16px); margin-bottom: 6px; }
-.ft--blueprint .ft-bp-row { display: flex; justify-content: space-between; font-size: 8.5pt; font-family: 'Courier New', monospace; }
+.ft--blueprint .ft-bp-row { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; font-size: 8.5pt; font-family: 'Courier New', monospace; }
 
 .ft--gradient { background: linear-gradient(90deg, var(--c-primary), var(--c-accent)); color: #fff; padding: 4mm var(--pad); margin: 6mm calc(-1 * var(--pad)) 0; }
-.ft--gradient .ft-grad-row { display: flex; justify-content: space-between; font-size: 8.5pt; }
+.ft--gradient .ft-grad-row { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; font-size: 8.5pt; }
 .ft--gradient .ft-notes { color: rgba(255,255,255,.85); }

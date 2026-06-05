@@ -10,6 +10,7 @@
  */
 import { CDN } from '../core/config.js';
 import { loadScript, decodeZatcaTLV } from '../utils/qrUtils.js';
+import { qrDataURL } from '../utils/qrcode.js';
 import { PdfImportService } from './PdfImportService.js';
 
 function fileToDataUrl(file) {
@@ -100,10 +101,11 @@ export const QrService = {
    */
   async regenerate(content, opts = {}) {
     if (!content) throw new Error('لا يوجد محتوى لإنشاء رمز QR');
-    await loadScript(CDN.qrcode);
-    const imageDataUrl = await window.QRCode.toDataURL(content, {
-      width: opts.width || 320, margin: opts.margin ?? 1,
-      errorCorrectionLevel: opts.ecl || 'M',
+    // Local, dependency-free encoder — works offline and keeps data on-device.
+    const imageDataUrl = qrDataURL(content, {
+      ecc: opts.ecl || 'M',
+      scale: opts.scale || 6,
+      margin: opts.margin ?? 4,
     });
     return { imageDataUrl, content, decoded: decodeZatcaTLV(content) };
   },
