@@ -129,7 +129,10 @@
 .hd--minimal .hd-min-sub { font-size: 8.5pt; color: var(--c-muted); margin-top: 2px; }
 
 /* ---------- Customer variants ---------- */
-.cust-label { font-size: 8.5pt; color: var(--c-muted); text-transform: uppercase; letter-spacing: .05em; }
+/* NOTE: letter-spacing / uppercase must never apply to Arabic (it breaks cursive joining),
+   so they're scoped to the English (.bl-en) part only. */
+.cust-label { font-size: 8.5pt; color: var(--c-muted); }
+.cust-label .bl-en { text-transform: uppercase; letter-spacing: .05em; }
 .cust-name { font-size: 12pt; font-weight: 800; color: var(--c-text); }
 .cust-line { font-size: 9pt; }
 .cust-line span { color: var(--c-muted); }

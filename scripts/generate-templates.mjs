@@ -194,9 +194,9 @@ function css(t) {
   const extras = {
     'modern-glass': `.tpl-${id} .cust--card{backdrop-filter:blur(6px);background:rgba(255,255,255,.6);border-color:rgba(99,102,241,.25);box-shadow:0 8px 30px rgba(99,102,241,.12);}
 .tpl-${id} .tot--card{box-shadow:0 10px 30px rgba(168,85,247,.18);}`,
-    'modern-minimal': `.tpl-${id}{font-size:10.5pt;letter-spacing:.005em;}
+    'modern-minimal': `.tpl-${id}{font-size:10.5pt;}
 .tpl-${id} .hd-doctype{font-weight:600;}`,
-    'executive-gold': `.tpl-${id} .hd-doctype{letter-spacing:.04em;}
+    'executive-gold': `.tpl-${id} .hd-doctype-en{letter-spacing:.06em;}
 .tpl-${id} .tbl--grid thead th{background:#1a1a1a;color:#c9a227;border-color:#c9a227;}`,
     'executive-dark': `.tpl-${id} .tbl--darkhead thead th{background:#0f172a;}
 .tpl-${id} .tot--bar .tot-bar-grand{background:#0f172a;}`,
@@ -217,8 +217,7 @@ function css(t) {
 .tpl-${id} .tbl--grid thead th{background:var(--c-primary);color:#fff;border-color:var(--c-primary);}
 .tpl-${id} .tot--ledger .tot-ledger-grand td{border-color:var(--c-primary);}`,
     'official-slate': `.tpl-${id} .hd-rail{border-end-end-radius:0;}
-.tpl-${id} .tbl--minimal thead th{color:var(--c-primary);border-bottom-color:var(--c-primary);}
-.tpl-${id} .cust--boxed .cust-box-head{letter-spacing:.03em;}`,
+.tpl-${id} .tbl--minimal thead th{color:var(--c-primary);border-bottom-color:var(--c-primary);}`,
     'ministry-green': `.tpl-${id} .hd--band{border-bottom:4px solid var(--c-accent);}
 .tpl-${id} .tbl--darkhead thead th{background:var(--c-primary);}
 .tpl-${id} .tot--boxed .tot-grand{background:var(--c-primary);}`,
@@ -228,14 +227,14 @@ function css(t) {
     'graphite-letter': `.tpl-${id}{font-size:10.5pt;}
 .tpl-${id} .inv-header{border-top:4px solid var(--c-primary);padding-top:6mm;}
 .tpl-${id} .hd--minimal .hd-min-row{border-bottom-width:2px;}
-.tpl-${id} .tbl--minimal thead th{letter-spacing:.06em;}`,
+.tpl-${id} .tbl--minimal thead th .bl-en{letter-spacing:.06em;}`,
     'petrol-blue': `.tpl-${id} .hd--split .hd-divider{background:var(--c-primary);}
 .tpl-${id} .tbl--striped thead th{background:var(--c-primary);}
 .tpl-${id} .tot--bar .tot-bar-grand{background:var(--c-primary);}`,
     'steel-corporate': `.tpl-${id} .hd--darkbar{background:var(--c-primary);border-bottom-color:var(--c-accent);}
 .tpl-${id} .tbl--darkhead thead th{background:var(--c-primary);}`,
     'bronze-classic': `.tpl-${id} .hd--ribbon{border-top-color:var(--c-accent);}
-.tpl-${id} .hd-doctype{letter-spacing:.05em;}
+.tpl-${id} .hd-doctype-en{letter-spacing:.08em;}
 .tpl-${id} .tbl--grid thead th{background:#f6efe3;color:var(--c-primary);border-color:#e0d2bb;}
 .tpl-${id} .tot--boxed .tot-grand{background:var(--c-primary);}`,
   };
