@@ -16,7 +16,7 @@ export async function ImportPage() {
   const el = h('div', { class: 'max-w-5xl mx-auto px-4 py-6' });
   let pdfFile = null;
 
-  const tabs = ['يدوي', 'استيراد PDF', 'رفع صورة', 'استيراد JSON'];
+  const tabs = ['يدوي', 'استيراد PDF', 'رفع صورة', 'استيراد JSON', 'استيراد XML'];
   let active = 0;
   const tabBar = h('div', { class: 'flex gap-1 bg-slate-100 p-1 rounded-xl w-fit mb-5' });
   const panel = h('div', {});
@@ -99,6 +99,26 @@ export async function ImportPage() {
         ),
       );
     }
+
+    if (active === 4) {
+      const out = h('div', { class: 'mt-4' });
+      panel.append(
+        h('p', { class: 'text-sm text-slate-500 mb-2' }, 'ارفع ملف فاتورة إلكترونية بصيغة XML (معيار ZATCA / UBL). سيتم استخراج كل البيانات كاملةً.'),
+        FileDrop({ accept: '.xml,text/xml,application/xml', label: 'اسحب ملف XML أو انقر للاختيار', hint: 'فاتورة ZATCA/UBL الرسمية — استخراج كامل ودقيق', onFile: async (f) => {
+          clear(out); out.appendChild(Spinner('جارٍ قراءة ملف XML…'));
+          try {
+            const res = await ImportService.fromXml(f);
+            clear(out);
+            if (!res.ok) { out.appendChild(h('div', { class: 'text-rose-500 text-sm' }, res.errors[0])); return; }
+            const inv = ImportService.buildFromReviewed(res.payload, 'xml');
+            out.appendChild(h('div', { class: 'text-emerald-600 text-sm font-semibold mb-3' },
+              `✅ تم استخراج الفاتورة كاملة من XML (${res.items.length} بند). يمكنك المتابعة للمعاينة.`));
+            out.appendChild(h('button', { class: 'btn-primary', onClick: () => finish(inv) }, 'متابعة إلى المعاينة'));
+          } catch (e) { clear(out); out.appendChild(h('div', { class: 'text-rose-500 text-sm' }, 'تعذر قراءة الملف: ' + e.message)); }
+        } }),
+        out,
+      );
+    }
   }
 
   function showReview(out, res, source) {
@@ -115,7 +135,7 @@ export async function ImportPage() {
 
   el.append(
     h('h1', { class: 'text-2xl font-extrabold text-slate-800' }, 'إدخال / استيراد فاتورة'),
-    h('p', { class: 'text-slate-500 text-sm mb-5' }, 'أدخل الفاتورة يدوياً أو استوردها من PDF أو صورة أو JSON. لن يتم تعديل بياناتك الأصلية.'),
+    h('p', { class: 'text-slate-500 text-sm mb-5' }, 'أدخل الفاتورة يدوياً أو استوردها من PDF أو صورة أو JSON أو XML. لن يتم تعديل بياناتك الأصلية.'),
     tabBar, panel,
     h('div', { class: 'mt-6' }, QrPanel({ getPdfFile: () => pdfFile })),
   );

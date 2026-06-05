@@ -7,6 +7,7 @@ import { Invoice } from '../models/Invoice.js';
 import { ValidationService } from './ValidationService.js';
 import { PdfImportService } from './PdfImportService.js';
 import { OcrService } from './OcrService.js';
+import { parseUblInvoice } from './parsers/ublParser.js';
 
 export const ImportService = {
   /** Build an Invoice from a manual form payload. */
@@ -29,6 +30,17 @@ export const ImportService = {
   async fromPdf(file) {
     const result = await PdfImportService.extract(file);
     return { ...result, source: 'pdf' };
+  },
+
+  /**
+   * Import a standalone ZATCA/UBL XML invoice file. Returns the complete, exact data
+   * (same parser used for embedded PDF XML). { mode:'ubl', payload, found, items, qrContent }.
+   */
+  async fromXml(input) {
+    const text = typeof input === 'string' ? input : await input.text();
+    const ubl = parseUblInvoice(text);
+    if (!ubl) return { ok: false, errors: ['الملف ليس فاتورة XML بصيغة UBL/ZATCA صالحة'] };
+    return { ok: true, ...ubl, source: 'xml' };
   },
 
   /** Extract a PARTIAL payload from an image via OCR for user review. */
