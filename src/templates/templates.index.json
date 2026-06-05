@@ -362,6 +362,53 @@
         "formal"
       ],
       "builtin": true
+    },
+    {
+      "id": "zatca",
+      "name": "زاتكا الرسمي",
+      "nameEn": "ZATCA Standard",
+      "category": "Government",
+      "tags": [
+        "government",
+        "zatca",
+        "official",
+        "detailed",
+        "رسمي",
+        "زاتكا"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "zatca-green",
+      "name": "زاتكا أخضر",
+      "nameEn": "ZATCA Green",
+      "category": "Government",
+      "tags": [
+        "government",
+        "zatca",
+        "official",
+        "detailed",
+        "green",
+        "رسمي",
+        "زاتكا"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "zatca-gray",
+      "name": "زاتكا رمادي",
+      "nameEn": "ZATCA Gray",
+      "category": "Government",
+      "tags": [
+        "government",
+        "zatca",
+        "official",
+        "detailed",
+        "gray",
+        "رسمي",
+        "زاتكا"
+      ],
+      "builtin": true
     }
   ]
 }

@@ -52,6 +52,23 @@ export const footerBlocks = {
       <div class="ft-bp-row"><span>${esc(c.invoice.company.name || '')}</span><span>${contact(c)}</span></div>
     </div>`,
 
+  // ZATCA address footer: computer-generated note + company address & contact line.
+  address: (c) => {
+    const co = c.invoice.company;
+    const contactBits = [
+      co.phone && `Tel: ${co.phone}`,
+      co.email && `E-mail: ${co.email}`,
+      co.website && `Website: ${co.website}`,
+    ].filter(Boolean).map(esc).join(' &nbsp;-&nbsp; ');
+    return `
+      <div class="ft ft--address">
+        <div class="ft-cg">${T.computerGenerated[1]} — ${T.computerGenerated[0]}</div>
+        <div class="ft-addr-rule"></div>
+        ${co.address ? `<div class="ft-addr">${esc(co.address)}</div>` : ''}
+        ${contactBits ? `<div class="ft-contact2">${contactBits}</div>` : ''}
+      </div>`;
+  },
+
   // Gradient footer band.
   gradient: (c) => `
     <div class="ft ft--gradient">

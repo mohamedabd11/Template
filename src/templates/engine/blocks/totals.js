@@ -3,7 +3,7 @@
  * Always reflects the invoice's (possibly original) figures; never recomputes source totals.
  */
 import { esc } from '../../../utils/dom.js';
-import { bl, blText } from '../labels.js';
+import { bl, blText, T } from '../labels.js';
 
 function lines(c) {
   const inv = c.invoice;
@@ -62,6 +62,29 @@ export const totalsBlocks = {
       </table>
       ${inWords(c)}
     </div>`,
+
+  // ZATCA statement: stacked bilingual bordered rows (Total / Discount / Taxable / VAT /
+  // Gross / Balance Due) with the amount in words.
+  statement: (c) => {
+    const inv = c.invoice;
+    const taxable = inv.subtotal - inv.discountTotal;
+    const rows = [
+      [T.totalAmount, c.money(inv.subtotal, false)],
+      [T.totalDiscount, c.money(inv.discountTotal, false)],
+      [T.taxableAmount, c.money(taxable, false)],
+      [T.vatTotalAmount, c.money(inv.taxTotal, false)],
+      [T.grossTotal, c.money(inv.grandTotal, false), 'is-gross'],
+      [T.balanceDue, c.money(inv.grandTotal, false), 'is-balance'],
+    ];
+    return `
+      <div class="tot tot--statement">
+        ${rows.map(([lbl, val, cls]) => `<div class="st-row ${cls || ''}">
+          <span class="st-en">${lbl[1]} (SAR)</span>
+          <span class="st-val">${val}</span>
+          <span class="st-ar">${lbl[0]} (ر.س)</span></div>`).join('')}
+        <div class="st-words"><span>${blText('amountInWords')}:</span> ${esc(c.tafqeet(inv.grandTotal))}</div>
+      </div>`;
+  },
 
   // Gold-framed luxury totals.
   'gold-frame': (c) => `

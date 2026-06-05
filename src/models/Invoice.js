@@ -16,7 +16,9 @@ export class Invoice {
     this.invoiceNumber = data.invoiceNumber || '';
     this.date = data.date || '';
     this.dueDate = data.dueDate || '';
+    this.supplyDate = data.supplyDate || '';
     this.poNumber = data.poNumber || '';
+    this.project = data.project || '';
     this.notes = data.notes || '';
     this.currency = data.currency || 'SAR';
 
@@ -67,7 +69,8 @@ export class Invoice {
   toJSON() {
     return {
       id: this.id, invoiceNumber: this.invoiceNumber, date: this.date, dueDate: this.dueDate,
-      poNumber: this.poNumber, notes: this.notes, currency: this.currency,
+      supplyDate: this.supplyDate, poNumber: this.poNumber, project: this.project,
+      notes: this.notes, currency: this.currency,
       company: this.company.toJSON(), customer: this.customer.toJSON(),
       items: this.items.map((i) => i.toJSON()),
       qrContent: this.qrContent, qrImageDataUrl: this.qrImageDataUrl,

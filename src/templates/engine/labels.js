@@ -38,14 +38,40 @@ export const T = {
 
   // Table columns (by column key)
   col_index:      ['#', '#'],
+  col_code:       ['الرمز', 'Code'],
   col_description:['البيان', 'Description'],
   col_qty:        ['الكمية', 'Qty'],
+  col_unit:       ['الوحدة', 'Unit'],
   col_unitPrice:  ['سعر الوحدة', 'Unit Price'],
-  col_taxAmount:  ['الضريبة', 'VAT'],
-  col_taxRate:    ['نسبة الضريبة', 'VAT %'],
+  col_taxAmount:  ['مبلغ الضريبة', 'Tax Amount'],
+  col_taxRate:    ['نسبة الضريبة', 'Tax Rate'],
   col_discount:   ['الخصم', 'Discount'],
   col_subtotal:   ['الإجمالي', 'Subtotal'],
+  col_subtotalExcl: ['الإجمالي قبل الضريبة', 'Subtotal Excl. VAT'],
+  col_subtotalIncl: ['الإجمالي شامل الضريبة', 'Subtotal Incl. VAT'],
   col_total:      ['الإجمالي', 'Total'],
+
+  // ZATCA detailed template
+  sellerDetails:  ['تفاصيل المورد', 'Seller Details'],
+  buyerDetails:   ['تفاصيل العميل', 'Buyer Details'],
+  fldName:        ['الاسم', 'Name'],
+  fldStreet:      ['اسم الشارع', 'Street Name'],
+  fldBuilding:    ['رقم المبنى', 'Building No'],
+  fldAddl:        ['الرقم الإضافي', 'Additional No'],
+  fldPostal:      ['الرمز البريدي', 'Postal Code'],
+  fldDistrict:    ['الحي', 'District'],
+  fldCity:        ['المدينة', 'City'],
+  fldCountry:     ['الدولة', 'Country'],
+  supplyDate:     ['تاريخ التوريد', 'Supply Date'],
+  invoicePeriod:  ['فترة الفاتورة', 'Invoice Period'],
+  projectRef:     ['المشروع / المرجع', 'Project / Reference No'],
+  totalAmount:    ['الإجمالي', 'Total Amount'],
+  totalDiscount:  ['إجمالي الخصم', 'Total Discount Amount'],
+  taxableAmount:  ['الإجمالي الخاضع للضريبة', 'Invoice Taxable Amount'],
+  vatTotalAmount: ['إجمالي ضريبة القيمة المضافة', 'VAT Total Amount'],
+  grossTotal:     ['الإجمالي شامل الضريبة', 'Gross Total (Incl. VAT)'],
+  balanceDue:     ['المبلغ المستحق', 'Balance Due'],
+  computerGenerated: ['هذا مستند صادر إلكترونياً، لا يتطلب توقيعاً.', 'This is a computer generated document, No Signature required.'],
 };
 
 /** Arabic primary + English secondary, as HTML. */

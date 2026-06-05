@@ -19,6 +19,20 @@ const cols = {
     { key: 'taxAmount', label: 'الضريبة', align: 'center', width: '14%' },
     { key: 'total', label: 'الإجمالي', align: 'center', width: '14%' },
   ],
+  // Detailed ZATCA invoice columns (labels resolved bilingually by the engine).
+  zatca: [
+    { key: 'index', label: '#', align: 'center', width: '3%' },
+    { key: 'code', label: 'الرمز', align: 'center', width: '8%' },
+    { key: 'description', label: 'البيان', align: 'right', width: '26%' },
+    { key: 'qty', label: 'الكمية', align: 'center', width: '6%' },
+    { key: 'unit', label: 'الوحدة', align: 'center', width: '5%' },
+    { key: 'unitPrice', label: 'سعر الوحدة', align: 'center', width: '9%' },
+    { key: 'discount', label: 'الخصم', align: 'center', width: '7%' },
+    { key: 'subtotalExcl', label: 'الإجمالي قبل الضريبة', align: 'center', width: '10%' },
+    { key: 'taxRate', label: 'نسبة الضريبة', align: 'center', width: '5%' },
+    { key: 'taxAmount', label: 'مبلغ الضريبة', align: 'center', width: '8%' },
+    { key: 'subtotalIncl', label: 'الإجمالي شامل الضريبة', align: 'center', width: '13%' },
+  ],
 };
 
 // id, name(ar), nameEn, category, theme, fonts, layout variants, css identity
@@ -185,6 +199,23 @@ const T = [
     fonts: { base: 'Tajawal', heading: 'Cairo' },
     L: { header: 'ribbon', customer: 'card', table: 'grid', totals: 'boxed-right', qr: 'framed', footer: 'signature-stamp' },
     tags: ['executive', 'bronze', 'classic', 'formal'] },
+
+  // ---- ZATCA detailed (faithful Saudi e-invoice system layout) ----
+  { id: 'zatca', name: 'زاتكا الرسمي', en: 'ZATCA Standard', cat: 'Government', cols: 'zatca',
+    theme: { primary: '#1d3a8f', accent: '#2c5aa0', line: '#cdd7ea', text: '#13213f', muted: '#5a6b86' },
+    fonts: { base: 'Tajawal', heading: 'Tajawal' },
+    L: { header: 'letterhead', customer: 'zatca-details', table: 'grid', totals: 'statement', qr: 'captioned', footer: 'address' },
+    tags: ['government', 'zatca', 'official', 'detailed', 'رسمي', 'زاتكا'] },
+  { id: 'zatca-green', name: 'زاتكا أخضر', en: 'ZATCA Green', cat: 'Government', cols: 'zatca',
+    theme: { primary: '#0f5132', accent: '#198754', line: '#cfe3d6', text: '#10261b', muted: '#5a7065' },
+    fonts: { base: 'Tajawal', heading: 'Tajawal' },
+    L: { header: 'letterhead', customer: 'zatca-details', table: 'grid', totals: 'statement', qr: 'captioned', footer: 'address' },
+    tags: ['government', 'zatca', 'official', 'detailed', 'green', 'رسمي', 'زاتكا'] },
+  { id: 'zatca-gray', name: 'زاتكا رمادي', en: 'ZATCA Gray', cat: 'Government', cols: 'zatca',
+    theme: { primary: '#374151', accent: '#4b5563', line: '#dde1e7', text: '#1f2937', muted: '#6b7280' },
+    fonts: { base: 'IBM Plex Sans Arabic', heading: 'IBM Plex Sans Arabic' },
+    L: { header: 'letterhead', customer: 'zatca-details', table: 'grid', totals: 'statement', qr: 'captioned', footer: 'address' },
+    tags: ['government', 'zatca', 'official', 'detailed', 'gray', 'رسمي', 'زاتكا'] },
 ];
 
 // Per-template CSS identity (extra flourishes beyond the base/theme variables).
@@ -258,7 +289,7 @@ for (const t of T) {
       qr: { variant: t.L.qr },
       footer: { variant: t.L.footer },
     },
-    columns: cols.full,
+    columns: t.cols === 'zatca' ? cols.zatca : cols.full,
   };
   writeFileSync(resolve(dir, 'template.json'), JSON.stringify(json, null, 2) + '\n');
   writeFileSync(resolve(dir, 'template.css'), css(t));

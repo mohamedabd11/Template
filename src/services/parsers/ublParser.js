@@ -32,12 +32,21 @@ function party(partyWrapper) {
   const name = dtext(firstDesc(p, 'PartyLegalEntity'), 'RegistrationName')
     || dtext(firstDesc(p, 'PartyName'), 'Name');
   const vatNumber = dtext(firstDesc(p, 'PartyTaxScheme'), 'CompanyID') || '';
+  const crNumber = (() => {
+    const pid = firstDesc(p, 'PartyIdentification');
+    return pid ? textOf(firstDesc(pid, 'ID')) : '';
+  })();
   const addr = firstDesc(p, 'PostalAddress');
-  const address = addr
-    ? [dtext(addr, 'StreetName'), dtext(addr, 'BuildingNumber'), dtext(addr, 'CityName'),
-       dtext(addr, 'PostalZone'), dtext(addr, 'CountrySubentity')].filter(Boolean).join('، ')
-    : '';
-  return { name: name || '', vatNumber, address };
+  const part = (n) => (addr ? dtext(addr, n) : '');
+  const street = part('StreetName');
+  const buildingNumber = part('BuildingNumber');
+  const additionalNumber = part('PlotIdentification');
+  const district = part('CitySubdivisionName');
+  const city = part('CityName');
+  const postalCode = part('PostalZone');
+  const country = part('IdentificationCode') || part('Name');
+  const address = [street, buildingNumber, district, city, postalCode, country].filter(Boolean).join('، ');
+  return { name: name || '', vatNumber, crNumber, address, street, buildingNumber, additionalNumber, district, city, postalCode, country };
 }
 
 function extractQr(root) {
@@ -60,10 +69,14 @@ function lineItems(root) {
     const unitPrice = numOf(dtext(priceEl, 'PriceAmount')) ?? (qty ? lineExt / qty : 0);
     const itemEl = firstDesc(line, 'Item');
     const description = dtext(itemEl, 'Name') || dtext(line, 'Name') || 'بند';
+    const code = dtext(firstDesc(itemEl, 'SellersItemIdentification'), 'ID')
+      || dtext(firstDesc(itemEl, 'BuyersItemIdentification'), 'ID') || '';
+    const unitCode = firstDesc(line, 'InvoicedQuantity')?.getAttribute('unitCode') || '';
+    const discount = numOf(dtext(firstDesc(line, 'AllowanceCharge'), 'Amount')) || 0;
     // tax percent from the line's tax category if present
     const pct = numOf(dtext(firstDesc(line, 'ClassifiedTaxCategory'), 'Percent'));
     const taxRate = pct != null ? pct / 100 : 0.15;
-    return { description, qty, unitPrice, discount: 0, taxRate };
+    return { description, code, unit: unitCode, qty, unitPrice, discount, taxRate };
   });
 }
 
@@ -78,6 +91,11 @@ export function parseUblInvoice(xmlString) {
   const invoiceNumber = textOf(kid(root, 'ID'));
   const date = textOf(kid(root, 'IssueDate'));
   const dueDate = textOf(kid(root, 'DueDate'));
+  // Supply date & references (used by the detailed ZATCA template).
+  let supplyDate = '';
+  for (const d of desc(root, 'Delivery')) { const v = dtext(d, 'ActualDeliveryDate'); if (v) { supplyDate = v; break; } }
+  const poNumber = dtext(firstDesc(root, 'OrderReference'), 'ID') || '';
+  const project = dtext(firstDesc(root, 'ContractDocumentReference'), 'ID') || '';
 
   const company = party(firstDesc(root, 'AccountingSupplierParty'));
   const customer = party(firstDesc(root, 'AccountingCustomerParty'));
@@ -106,7 +124,7 @@ export function parseUblInvoice(xmlString) {
     items,
     found,
     payload: {
-      invoiceNumber, date, dueDate,
+      invoiceNumber, date, dueDate, supplyDate, poNumber, project,
       company, customer,
       items,
       originalTotals: { subtotal, tax, total, discount },

@@ -114,6 +114,29 @@ export const headerBlocks = {
       <div class="hd-bp-stamp">${titleBlock(c)}</div>
     </div>`,
 
+  // Letterhead (ZATCA detailed style): logo left, centered company names + CR, then a
+  // "TAX INVOICE" title bar and the invoice-number row.
+  letterhead: (c) => {
+    const co = c.invoice.company; const inv = c.invoice;
+    return `
+    <div class="hd hd--letterhead">
+      <div class="lh-top">
+        <div class="lh-logo">${logo(c)}</div>
+        <div class="lh-names">
+          <div class="lh-name-ar">${esc(co.name || 'اسم المنشأة')}</div>
+          ${co.nameEn ? `<div class="lh-name-en">${esc(co.nameEn)}</div>` : ''}
+          ${co.crNumber ? `<div class="lh-cr">C.R. ${esc(co.crNumber)} &nbsp;·&nbsp; س.ت ${esc(co.crNumber)}</div>` : ''}
+        </div>
+        <div class="lh-logo lh-logo--spacer"></div>
+      </div>
+      <div class="lh-title">${T.taxInvoice[1]} &nbsp; · &nbsp; ${T.taxInvoice[0]}</div>
+      <div class="lh-invno">
+        <span>Invoice No: <b>${esc(inv.invoiceNumber || '')}</b></span>
+        <span><b>${esc(inv.invoiceNumber || '')}</b> ${T.invoiceNo[0]}</span>
+      </div>
+    </div>`;
+  },
+
   // Minimal line: just a hairline rule, tiny logo, compact title.
   'minimal-line': (c) => `
     <div class="hd hd--minimal">

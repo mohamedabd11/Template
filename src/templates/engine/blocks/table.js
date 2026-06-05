@@ -7,13 +7,17 @@ import { colLabel } from '../labels.js';
 function cellValue(col, item, idx, c) {
   switch (col.key) {
     case 'index': return String(idx + 1);
+    case 'code': return esc(item.code || '');
     case 'description': return esc(item.description);
     case 'qty': return c.num(item.qty);
+    case 'unit': return esc(item.unit || '');
     case 'unitPrice': return c.money(item.unitPrice, false);
     case 'taxAmount': return c.money(item.taxAmount, false);
     case 'taxRate': return `${Math.round(item.taxRate * 100)}%`;
     case 'discount': return c.money(item.discount, false);
-    case 'subtotal': return c.money(item.subtotal, false);
+    case 'subtotal':
+    case 'subtotalExcl': return c.money(item.subtotal, false);
+    case 'subtotalIncl': return c.money(item.total, false);
     case 'total': return c.money(item.total, false);
     default: return esc(item[col.key] ?? '');
   }

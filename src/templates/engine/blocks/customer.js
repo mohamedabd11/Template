@@ -2,7 +2,32 @@
  * Customer block variants — different ways/places to present the buyer (bill-to) data.
  */
 import { esc } from '../../../utils/dom.js';
-import { bl, blText } from '../labels.js';
+import { bl, blText, T } from '../labels.js';
+
+/** A bilingual label+value cell used by the ZATCA details grids. */
+function zCell(labelHtml, value, cls = '') {
+  const v = (value == null || value === '') ? '—' : esc(value);
+  return `<div class="zd-cell ${cls}"><span class="zd-lbl">${labelHtml}</span><span class="zd-val">${v}</span></div>`;
+}
+
+function detailsBlock(labelPair, p) {
+  return `
+    <div class="zd">
+      <div class="zd-head"><span>${labelPair[1]}</span><span>${labelPair[0]}</span></div>
+      <div class="zd-grid">
+        ${zCell(bl('fldName'), p.name, 'zd-cell--wide')}
+        ${zCell(bl('fldStreet'), p.street)}
+        ${zCell(bl('fldCity'), p.city)}
+        ${zCell(bl('fldBuilding'), p.buildingNumber)}
+        ${zCell(bl('fldDistrict'), p.district)}
+        ${zCell(bl('fldAddl'), p.additionalNumber)}
+        ${zCell(bl('fldPostal'), p.postalCode)}
+        ${zCell(bl('fldCountry'), p.country)}
+        ${zCell(bl('vatNo'), p.vatNumber)}
+        ${zCell(bl('crNo'), p.crNumber)}
+      </div>
+    </div>`;
+}
 
 function rows(c) {
   const cu = c.invoice.customer;
@@ -56,6 +81,21 @@ export const customerBlocks = {
         ${rows(c).map(([k, v]) => `<div class="cust-line"><span>${k}:</span> ${esc(v)}</div>`).join('')}
       </div>
     </div>`,
+
+  // ZATCA detailed: Seller Details grid + Buyer Details grid + dates/reference row.
+  'zatca-details': (c) => {
+    const inv = c.invoice;
+    return `
+      ${detailsBlock(T.sellerDetails, c.invoice.company)}
+      ${detailsBlock(T.buyerDetails, c.invoice.customer)}
+      <div class="zd zd--dates"><div class="zd-grid zd-grid--dates">
+        ${zCell(bl('date'), c.date(inv.date))}
+        ${zCell(bl('supplyDate'), c.date(inv.supplyDate))}
+        ${zCell(bl('po'), inv.poNumber)}
+        ${zCell(bl('dueDate'), c.date(inv.dueDate))}
+        ${zCell(bl('projectRef'), inv.project)}
+      </div></div>`;
+  },
 
   // Definition list with aligned labels.
   'labeled-rows': (c) => `

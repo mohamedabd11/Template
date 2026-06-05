@@ -242,3 +242,58 @@
 .ft--gradient { background: linear-gradient(90deg, var(--c-primary), var(--c-accent)); color: #fff; padding: 4mm var(--pad); margin: 6mm calc(-1 * var(--pad)) 0; }
 .ft--gradient .ft-grad-row { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; font-size: 8.5pt; }
 .ft--gradient .ft-notes { color: rgba(255,255,255,.85); }
+
+/* =====================================================================
+   ZATCA detailed layout (letterhead + seller/buyer grids + statement totals)
+   Used by the "ZATCA Standard" templates. All colors via --c-primary etc.
+   ===================================================================== */
+.hd--letterhead { padding-top: 2mm; }
+.hd--letterhead .lh-top { display: grid; grid-template-columns: 70px 1fr 70px; align-items: center; gap: 10px; padding-bottom: 5px; }
+.hd--letterhead .lh-logo { width: 70px; }
+.hd--letterhead .lh-logo .hd-logo { height: 60px; max-width: 70px; }
+.hd--letterhead .lh-names { text-align: center; }
+.hd--letterhead .lh-name-ar { font-size: 15pt; font-weight: 800; color: var(--c-primary); line-height: 1.25; }
+.hd--letterhead .lh-name-en { font-size: 11pt; font-weight: 700; color: var(--c-primary); }
+.hd--letterhead .lh-cr { font-size: 8.5pt; color: var(--c-primary); margin-top: 2px; }
+.hd--letterhead .lh-title { text-align: center; color: var(--c-primary); font-weight: 800; font-size: 13pt; padding: 4px 0; border-top: 2px solid var(--c-primary); border-bottom: 1px solid var(--c-line); }
+.hd--letterhead .lh-invno { display: flex; justify-content: space-between; color: var(--c-primary); font-size: 9.5pt; font-weight: 600; padding: 4px 2px; border-bottom: 1px solid var(--c-line); }
+
+/* Seller / Buyer detail grids */
+.zd { margin-bottom: 3.5mm; }
+.zd-head { background: var(--c-primary); color: #fff; display: flex; justify-content: space-between; padding: 3px 8px; font-weight: 700; font-size: 9pt; }
+.zd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--c-line); border: 1px solid var(--c-line); border-top: 0; }
+.zd-grid--dates { grid-template-columns: repeat(5, 1fr); }
+.zd-cell { background: #fff; display: flex; align-items: stretch; font-size: 8.5pt; min-height: 22px; }
+.zd-cell--wide { grid-column: 1 / -1; }
+.zd-lbl { background: color-mix(in srgb, var(--c-primary) 7%, #fff); color: var(--c-primary); padding: 3px 7px; min-width: 96px; font-weight: 700; display: flex; align-items: center; }
+.zd-grid--dates .zd-lbl { min-width: 0; flex-direction: column; align-items: flex-start; justify-content: center; }
+.zd-val { padding: 3px 7px; flex: 1; display: flex; align-items: center; word-break: break-word; }
+
+/* Wide items table for the detailed layout */
+.tpl-zatca .tbl, .tpl-zatca-green .tbl, .tpl-zatca-gray .tbl { font-size: 7.6pt; table-layout: fixed; width: 100%; }
+.tpl-zatca .tbl th, .tpl-zatca .tbl td,
+.tpl-zatca-green .tbl th, .tpl-zatca-green .tbl td,
+.tpl-zatca-gray .tbl th, .tpl-zatca-gray .tbl td { padding: 3px 4px; word-break: break-word; overflow-wrap: anywhere; vertical-align: middle; }
+.tpl-zatca .tbl td:nth-child(3), .tpl-zatca-green .tbl td:nth-child(3), .tpl-zatca-gray .tbl td:nth-child(3) { text-align: right; }
+.tpl-zatca .tbl--grid thead th, .tpl-zatca-green .tbl--grid thead th, .tpl-zatca-gray .tbl--grid thead th { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
+
+/* Statement totals */
+.tot--statement { font-size: 9pt; border-top: 1px solid var(--c-line); }
+.tot--statement .st-row { display: grid; grid-template-columns: 1fr 110px 1fr; align-items: center; border: 1px solid var(--c-line); border-top: 0; }
+.tot--statement .st-en { padding: 4px 8px; color: var(--c-muted); text-align: left; font-size: 8pt; }
+.tot--statement .st-val { padding: 4px 8px; font-weight: 800; text-align: center; border-inline: 1px solid var(--c-line); }
+.tot--statement .st-ar { padding: 4px 8px; color: var(--c-muted); text-align: right; font-size: 8pt; }
+.tot--statement .st-row.is-gross { background: color-mix(in srgb, var(--c-primary) 8%, #fff); }
+.tot--statement .st-row.is-gross .st-val { color: var(--c-primary); }
+.tot--statement .st-row.is-balance { background: var(--c-primary); }
+.tot--statement .st-row.is-balance .st-val { color: #fff; }
+.tot--statement .st-row.is-balance .st-en, .tot--statement .st-row.is-balance .st-ar { color: rgba(255,255,255,.85); }
+.tot--statement .st-words { margin-top: 6px; font-size: 8.5pt; }
+.tot--statement .st-words span { font-weight: 700; }
+
+/* Address footer */
+.ft--address { text-align: center; padding: 4mm var(--pad); }
+.ft--address .ft-cg { font-size: 7.5pt; color: var(--c-muted); }
+.ft--address .ft-addr-rule { height: 2px; background: var(--c-primary); margin: 5px 0; }
+.ft--address .ft-addr { font-size: 8.5pt; color: var(--c-primary); font-weight: 700; }
+.ft--address .ft-contact2 { font-size: 8pt; color: var(--c-muted); margin-top: 2px; }
