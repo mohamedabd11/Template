@@ -6,7 +6,6 @@ import { h, clear } from '../utils/dom.js';
 import { ImportService } from '../services/ImportService.js';
 import { store } from '../core/store.js';
 import { InvoiceForm } from '../components/InvoiceForm.js';
-import { ReviewPanel } from '../components/ReviewPanel.js';
 import { QrPanel } from '../components/QrPanel.js';
 import { FileDrop } from '../components/FileDrop.js';
 import { Spinner } from '../components/Spinner.js';
@@ -15,6 +14,8 @@ import { toast } from '../components/Toast.js';
 export async function ImportPage() {
   const el = h('div', { class: 'max-w-5xl mx-auto px-4 py-6' });
   let pdfFile = null;
+  let prefill = null; // payload extracted from PDF/OCR, loaded into the manual form for review
+  let prefillNote = null; // 'extracted' | 'noxml'
 
   const tabs = ['يدوي', 'استيراد PDF', 'رفع صورة', 'استيراد JSON', 'استيراد XML'];
   let active = 0;
@@ -39,8 +40,17 @@ export async function ImportPage() {
     clear(panel);
 
     if (active === 0) {
-      const form = InvoiceForm(store.get('currentInvoice')?.toJSON() || {});
-      panel.append(form, h('div', { class: 'mt-4 flex gap-2' },
+      const initial = prefill || store.get('currentInvoice')?.toJSON() || {};
+      const form = InvoiceForm(initial);
+      const itemCount = (initial.items || []).length;
+      const banner = prefillNote ? h('div', { class: 'bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-3 text-sm mb-4' },
+        h('div', { class: 'font-bold mb-1' }, prefillNote === 'noxml'
+          ? '⚠️ استخراج تقريبي من النص (الملف لا يحتوي XML)'
+          : '✅ تم استخراج البيانات من الصورة — راجعها قبل المتابعة'),
+        h('div', { class: 'text-xs leading-relaxed' },
+          `عُبّئت الحقول والبنود المكتشفة (${itemCount} بند). راجع وعدّل أي قيمة (خصوصاً البنود والإجماليات) ثم تابع. للاستخراج الكامل الدقيق استخدم «استيراد XML» إن توفّر الملف الأصلي.`),
+      ) : null;
+      panel.append(banner, form, h('div', { class: 'mt-4 flex gap-2' },
         h('button', { class: 'btn-primary', onClick: () => {
           const inv = ImportService.fromManual(form.read());
           const v = inv.validate(); if (!v.valid) { toast(v.errors[0], 'error'); return; }
@@ -64,7 +74,7 @@ export async function ImportPage() {
                 `✅ تم استخراج الفاتورة كاملة من XML المدمج (${res.items.length} بند). يمكنك المتابعة للمعاينة.`));
               out.appendChild(h('button', { class: 'btn-primary', onClick: () => finish(inv) }, 'متابعة إلى المعاينة'));
             } else {
-              showReview(out, res, 'pdf', 'noxml');
+              loadExtracted(res.payload, 'noxml');
             }
           } catch (e) { clear(out); out.appendChild(h('div', { class: 'text-rose-500 text-sm' }, 'تعذر قراءة الملف: ' + e.message)); }
         } }),
@@ -77,7 +87,7 @@ export async function ImportPage() {
       panel.append(
         FileDrop({ accept: 'image/png,image/jpeg', label: 'اسحب صورة الفاتورة (PNG/JPG) أو انقر للاختيار', hint: 'سيتم استخدام OCR لاستخراج البيانات ثم مراجعتها', onFile: async (f) => {
           clear(out); const sp = Spinner('جارٍ تشغيل OCR… قد يستغرق لحظات'); out.appendChild(sp);
-          try { const res = await ImportService.fromImage(f, (p) => { sp.lastChild.textContent = `جارٍ التعرف… ${Math.round(p * 100)}%`; }); showReview(out, res, 'image'); }
+          try { const res = await ImportService.fromImage(f, (p) => { sp.lastChild.textContent = `جارٍ التعرف… ${Math.round(p * 100)}%`; }); loadExtracted(res.payload, 'extracted'); }
           catch (e) { clear(out); out.appendChild(h('div', { class: 'text-rose-500 text-sm' }, 'تعذر المعالجة: ' + e.message)); }
         } }),
         out,
@@ -121,23 +131,12 @@ export async function ImportPage() {
     }
   }
 
-  function showReview(out, res, source, note) {
-    clear(out);
-    if (note === 'noxml') {
-      out.appendChild(h('div', { class: 'bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-3 text-sm mb-3' },
-        h('div', { class: 'font-bold mb-1' }, '⚠️ هذا الملف لا يحتوي فاتورة زاتكا إلكترونية (XML مدمج)'),
-        h('div', { class: 'text-xs leading-relaxed' },
-          'هذا النوع (مثل المستندات المطبوعة إلى PDF أو المستخلصات) لا يحوي بيانات منظّمة، لذا استُخرجت الحقول الأساسية من النص فقط — راجعها وأكمل البنود يدوياً. إن توفّر لديك ملف XML الأصلي، استخدم تبويب «استيراد XML» للحصول على استخراج كامل ودقيق.'),
-      ));
-    }
-    const review = ReviewPanel(res);
-    out.append(review, h('div', { class: 'mt-4 flex gap-2' },
-      h('button', { class: 'btn-primary', onClick: () => {
-        const reviewed = review.read();
-        if (!reviewed.items.length) { toast('أضف بنود الفاتورة من التبويب اليدوي بعد المراجعة', 'warn'); }
-        finish(ImportService.buildFromReviewed(reviewed, source));
-      } }, 'تأكيد ومتابعة'),
-    ));
+  /** Load an extracted payload into the manual form (tab 0) for full review/editing. */
+  function loadExtracted(payload, note) {
+    prefill = payload;
+    prefillNote = note;
+    toast('تم استخراج البيانات — راجعها في النموذج', 'success');
+    setTab(0);
   }
 
   el.append(

@@ -25,6 +25,30 @@ async function loadDoc(file) {
 }
 
 /**
+ * Reconstruct visual lines from pdf.js text items using their positions, so tables/rows are
+ * preserved (critical for extracting line items from printed PDFs). Items are grouped by their
+ * y-coordinate; within a line, Arabic (RTL) lines are read right-to-left, others left-to-right.
+ */
+function reconstructLines(items) {
+  const rows = [];
+  for (const it of items) {
+    const str = it.str;
+    if (!str || !str.trim()) continue;
+    const x = it.transform[4];
+    const y = it.transform[5];
+    let row = rows.find((r) => Math.abs(r.y - y) <= 3);
+    if (!row) { row = { y, items: [] }; rows.push(row); }
+    row.items.push({ x, str });
+  }
+  rows.sort((a, b) => b.y - a.y); // top (larger y) to bottom
+  return rows.map((r) => {
+    const isRtl = /[؀-ۿ]/.test(r.items.map((i) => i.str).join(''));
+    r.items.sort((a, b) => (isRtl ? b.x - a.x : a.x - b.x));
+    return r.items.map((i) => i.str).join(' ').replace(/\s+/g, ' ').trim();
+  }).join('\n');
+}
+
+/**
  * ZATCA Phase-2 PDFs (PDF/A-3) embed the full UBL invoice XML as an attachment.
  * If present, return the exact, complete data parsed from it.
  */
@@ -60,7 +84,7 @@ export const PdfImportService = {
     for (let p = 1; p <= doc.numPages; p++) {
       const page = await doc.getPage(p);
       const content = await page.getTextContent();
-      text += content.items.map((i) => i.str).join(' ') + '\n';
+      text += reconstructLines(content.items) + '\n';
     }
     return { mode: 'text', ...parseInvoiceText(text) };
   },
