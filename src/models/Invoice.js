@@ -22,6 +22,8 @@ export class Invoice {
     this.project = data.project || '';
     this.notes = data.notes || '';
     this.currency = data.currency || 'SAR';
+    this.transactionCode = data.transactionCode || ''; // ZATCA InvoiceTypeCode @name (e.g. 0100000)
+    this.uuid = data.uuid || '';
 
     this.company = data.company instanceof Company ? data.company : Company.fromJSON(data.company || {});
     this.customer = data.customer instanceof Customer ? data.customer : Customer.fromJSON(data.customer || {});
@@ -72,6 +74,7 @@ export class Invoice {
       id: this.id, invoiceNumber: this.invoiceNumber, date: this.date, dueDate: this.dueDate,
       supplyDate: this.supplyDate, invoicePeriod: this.invoicePeriod, poNumber: this.poNumber, project: this.project,
       notes: this.notes, currency: this.currency,
+      transactionCode: this.transactionCode, uuid: this.uuid,
       company: this.company.toJSON(), customer: this.customer.toJSON(),
       items: this.items.map((i) => i.toJSON()),
       qrContent: this.qrContent, qrImageDataUrl: this.qrImageDataUrl,

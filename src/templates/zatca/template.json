@@ -16,8 +16,8 @@
     "text": "#13213f",
     "muted": "#5a6b86",
     "bg": "#ffffff",
-    "primary": "#1d3a8f",
-    "accent": "#2c5aa0",
+    "primary": "#1c3c7a",
+    "accent": "#2a4e92",
     "line": "#cdd7ea"
   },
   "fonts": {
@@ -38,7 +38,7 @@
       "variant": "statement"
     },
     "qr": {
-      "variant": "captioned"
+      "variant": "zatca"
     },
     "footer": {
       "variant": "address"

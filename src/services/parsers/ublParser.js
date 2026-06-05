@@ -89,6 +89,8 @@ export function parseUblInvoice(xmlString) {
   const root = doc.documentElement;
 
   const invoiceNumber = textOf(kid(root, 'ID'));
+  const uuid = textOf(kid(root, 'UUID'));
+  const transactionCode = kid(root, 'InvoiceTypeCode')?.getAttribute('name') || '';
   const date = textOf(kid(root, 'IssueDate'));
   const dueDate = textOf(kid(root, 'DueDate'));
   // Supply date & references (used by the detailed ZATCA template).
@@ -127,7 +129,7 @@ export function parseUblInvoice(xmlString) {
     items,
     found,
     payload: {
-      invoiceNumber, date, dueDate, supplyDate, invoicePeriod, poNumber, project,
+      invoiceNumber, uuid, transactionCode, date, dueDate, supplyDate, invoicePeriod, poNumber, project,
       company, customer,
       items,
       originalTotals: { subtotal, tax, total, discount },
