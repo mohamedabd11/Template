@@ -12,7 +12,7 @@ export function LogoUploader({ initial = '', onChange, compact = false } = {}) {
   let dataUrl = initial || '';
 
   const img = h('img', {
-    class: 'w-14 h-14 object-contain rounded-lg border border-slate-200 bg-white p-1',
+    class: 'h-14 w-auto max-w-[170px] object-contain rounded-lg border border-slate-200 bg-white p-1',
     src: dataUrl || 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
     style: { display: dataUrl ? 'block' : 'none' },
   });

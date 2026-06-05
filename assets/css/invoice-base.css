@@ -43,11 +43,14 @@
 }
 .inv-footer { margin-top: auto; }
 
-/* ---------- Logo ---------- */
-.hd-logo { width: 64px; height: 64px; object-fit: contain; border-radius: 10px; }
+/* ---------- Logo ----------
+   Height-based with auto width so WIDE logos display at their real proportions
+   (not squashed into a tiny square). The monogram fallback stays square. */
+.hd-logo { height: 56px; width: auto; max-width: 200px; object-fit: contain; border-radius: 8px; flex-shrink: 0; }
 .hd-logo--mono {
+  width: 60px; height: 60px; max-width: none;
   display: grid; place-items: center;
-  background: var(--c-primary); color: #fff;
+  background: var(--c-primary); color: #fff; border-radius: 10px;
   font-size: 30px; font-weight: 800; font-family: var(--font-heading);
 }
 .hd-company .hd-name { font-size: 16pt; font-weight: 800; color: var(--c-primary); }
@@ -120,7 +123,8 @@
 .hd--minimal { padding-top: 6mm; }
 .hd--minimal .hd-min-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--c-text); padding-bottom: 6px; }
 .hd--minimal .hd-brand { display: flex; gap: 8px; align-items: center; }
-.hd--minimal .hd-logo { width: 28px; height: 28px; }
+.hd--minimal .hd-logo { height: 30px; width: auto; max-width: 120px; }
+.hd--minimal .hd-logo--mono { width: 30px; height: 30px; }
 .hd--minimal .hd-min-doc { font-weight: 700; }
 .hd--minimal .hd-min-sub { font-size: 8.5pt; color: var(--c-muted); margin-top: 2px; }
 
