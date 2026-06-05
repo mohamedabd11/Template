@@ -79,7 +79,7 @@ export async function PreviewPage(params = {}) {
         h('h1', { class: 'text-xl font-extrabold text-slate-800' }, `المعاينة — ${template.name}`),
         usingSample ? h('p', { class: 'text-amber-600 text-xs' }, 'تُعرض بيانات تجريبية. انتقل إلى "إدخال فاتورة" لاستخدام بياناتك.') : null,
       ),
-      h('div', { class: 'flex items-center gap-2' },
+      h('div', { class: 'flex flex-wrap items-center gap-2 w-full sm:w-auto' },
         viewBar,
         h('button', { class: 'btn-secondary', onClick: () => location.hash = '#/gallery' }, 'تغيير القالب'),
         h('button', { class: 'btn-secondary', onClick: openLogoDialog }, '🖼️ الشعار'),
