@@ -63,6 +63,7 @@ export const T = {
   fldCity:        ['المدينة', 'City'],
   fldCountry:     ['الدولة', 'Country'],
   supplyDate:     ['تاريخ التوريد', 'Supply Date'],
+  contractPo:     ['رقم العقد / الشراء', 'Contract / PO No'],
   invoicePeriod:  ['فترة الفاتورة', 'Invoice Period'],
   projectRef:     ['المشروع / المرجع', 'Project / Reference No'],
   totalAmount:    ['الإجمالي', 'Total Amount'],

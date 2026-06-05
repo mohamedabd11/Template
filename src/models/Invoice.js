@@ -17,6 +17,7 @@ export class Invoice {
     this.date = data.date || '';
     this.dueDate = data.dueDate || '';
     this.supplyDate = data.supplyDate || '';
+    this.invoicePeriod = data.invoicePeriod || '';
     this.poNumber = data.poNumber || '';
     this.project = data.project || '';
     this.notes = data.notes || '';
@@ -69,7 +70,7 @@ export class Invoice {
   toJSON() {
     return {
       id: this.id, invoiceNumber: this.invoiceNumber, date: this.date, dueDate: this.dueDate,
-      supplyDate: this.supplyDate, poNumber: this.poNumber, project: this.project,
+      supplyDate: this.supplyDate, invoicePeriod: this.invoicePeriod, poNumber: this.poNumber, project: this.project,
       notes: this.notes, currency: this.currency,
       company: this.company.toJSON(), customer: this.customer.toJSON(),
       items: this.items.map((i) => i.toJSON()),

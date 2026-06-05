@@ -96,6 +96,9 @@ export function parseUblInvoice(xmlString) {
   for (const d of desc(root, 'Delivery')) { const v = dtext(d, 'ActualDeliveryDate'); if (v) { supplyDate = v; break; } }
   const poNumber = dtext(firstDesc(root, 'OrderReference'), 'ID') || '';
   const project = dtext(firstDesc(root, 'ContractDocumentReference'), 'ID') || '';
+  let invoicePeriod = '';
+  const ip = firstDesc(root, 'InvoicePeriod');
+  if (ip) { const s = dtext(ip, 'StartDate'); const e = dtext(ip, 'EndDate'); if (s || e) invoicePeriod = [s, e].filter(Boolean).join(' — '); }
 
   const company = party(firstDesc(root, 'AccountingSupplierParty'));
   const customer = party(firstDesc(root, 'AccountingCustomerParty'));
@@ -124,7 +127,7 @@ export function parseUblInvoice(xmlString) {
     items,
     found,
     payload: {
-      invoiceNumber, date, dueDate, supplyDate, poNumber, project,
+      invoiceNumber, date, dueDate, supplyDate, invoicePeriod, poNumber, project,
       company, customer,
       items,
       originalTotals: { subtotal, tax, total, discount },

@@ -82,7 +82,8 @@ export const totalsBlocks = {
           <span class="st-en">${lbl[1]} (SAR)</span>
           <span class="st-val">${val}</span>
           <span class="st-ar">${lbl[0]} (ر.س)</span></div>`).join('')}
-        <div class="st-words"><span>${blText('amountInWords')}:</span> ${esc(c.tafqeet(inv.grandTotal))}</div>
+        <div class="st-words"><span>Amount in words:</span> ${esc(c.tafqeetEn(inv.grandTotal))}</div>
+        <div class="st-words st-words--ar"><span>${T.amountInWords[0]}:</span> ${esc(c.tafqeet(inv.grandTotal))}</div>
       </div>`;
   },
 

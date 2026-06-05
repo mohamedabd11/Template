@@ -91,8 +91,9 @@ export const customerBlocks = {
       <div class="zd zd--dates"><div class="zd-grid zd-grid--dates">
         ${zCell(bl('date'), c.date(inv.date))}
         ${zCell(bl('supplyDate'), c.date(inv.supplyDate))}
-        ${zCell(bl('po'), inv.poNumber)}
+        ${zCell(bl('contractPo'), inv.poNumber)}
         ${zCell(bl('dueDate'), c.date(inv.dueDate))}
+        ${zCell(bl('invoicePeriod'), inv.invoicePeriod)}
         ${zCell(bl('projectRef'), inv.project)}
       </div></div>`;
   },

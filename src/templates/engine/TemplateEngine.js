@@ -16,7 +16,7 @@ import { totalsBlocks } from './blocks/totals.js';
 import { qrBlocks } from './blocks/qr.js';
 import { footerBlocks } from './blocks/footer.js';
 import { money, num, date, toArabicDigits } from '../../utils/format.js';
-import { tafqeet } from '../../utils/tafqeet.js';
+import { tafqeet, tafqeetEn } from '../../utils/tafqeet.js';
 import { esc } from '../../utils/dom.js';
 
 const REGISTRY = {
@@ -54,7 +54,7 @@ function buildContext(invoice, template) {
     layout: template.layout || {},
     qr: { content: invoice.qrContent, imageDataUrl: invoice.qrImageDataUrl },
     // formatting helpers (display-only)
-    money, num, date, esc, tafqeet, toArabicDigits,
+    money, num, date, esc, tafqeet, tafqeetEn, toArabicDigits,
   };
 }
 

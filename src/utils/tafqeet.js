@@ -49,3 +49,38 @@ export function tafqeet(amount, currency = 'ريال سعودي', fraction = 'ه
   if (halalas) out += ` و${group(halalas)} ${fraction}`;
   return `${out} فقط لا غير`;
 }
+
+// ---- English amount-in-words (matches ZATCA system invoices) ----
+const ONES_EN = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+  'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+const TENS_EN = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+function below1000En(n) {
+  const parts = [];
+  const h = Math.floor(n / 100); n %= 100;
+  if (h) parts.push(`${ONES_EN[h]} Hundred`);
+  if (n < 20) { if (n) parts.push(ONES_EN[n]); }
+  else { const t = Math.floor(n / 10), o = n % 10; parts.push(TENS_EN[t] + (o ? ` ${ONES_EN[o]}` : '')); }
+  return parts.join(' ');
+}
+
+function toWordsEn(n) {
+  if (n === 0) return 'Zero';
+  const scales = [[1e9, 'Billion'], [1e6, 'Million'], [1e3, 'Thousand']];
+  const parts = [];
+  for (const [v, name] of scales) {
+    if (n >= v) { const c = Math.floor(n / v); n %= v; parts.push(`${below1000En(c)} ${name}`); }
+  }
+  if (n) parts.push(below1000En(n));
+  return parts.join(' ');
+}
+
+/** Convert amount to English words including halalas. */
+export function tafqeetEn(amount, currency = 'Saudi Riyals', fraction = 'Halalas') {
+  const n = Math.abs(Number(amount || 0));
+  const riyals = Math.floor(n);
+  const halalas = Math.round((n - riyals) * 100);
+  let out = `${toWordsEn(riyals)} ${currency}`;
+  if (halalas) out += ` And ${toWordsEn(halalas)} ${fraction}`;
+  return `${out} only.`;
+}
