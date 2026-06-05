@@ -11,6 +11,7 @@ import { getSampleInvoice } from '../utils/sample.js';
 import { toast } from '../components/Toast.js';
 import { Modal } from '../components/Modal.js';
 import { LogoUploader } from '../components/LogoUploader.js';
+import { QrInfo } from '../components/QrInfo.js';
 import { QrService } from '../services/QrService.js';
 
 export async function PreviewPage(params = {}) {
@@ -43,6 +44,15 @@ export async function PreviewPage(params = {}) {
     viewBtn('سطح المكتب', 'desktop'), viewBtn('A4', 'a4'), viewBtn('طباعة', 'print'));
   function sync() { viewBar.querySelectorAll('button').forEach((b) => b.classList.toggle('is-active', b.dataset.v === view)); }
 
+  // Show what's inside the QR (decoded ZATCA TLV fields, or raw content).
+  function openQrDialog() {
+    Modal({
+      title: 'محتوى رمز QR',
+      size: 'sm',
+      body: QrInfo(invoice.qrContent),
+    });
+  }
+
   // Attach / replace the organization logo on the current invoice (works for any source).
   function openLogoDialog() {
     const uploader = LogoUploader({
@@ -73,6 +83,7 @@ export async function PreviewPage(params = {}) {
         viewBar,
         h('button', { class: 'btn-secondary', onClick: () => location.hash = '#/gallery' }, 'تغيير القالب'),
         h('button', { class: 'btn-secondary', onClick: openLogoDialog }, '🖼️ الشعار'),
+        h('button', { class: 'btn-secondary', onClick: openQrDialog }, '🔎 محتوى QR'),
         h('button', { class: 'btn-secondary', onClick: () => ExportService.print(node) }, '🖨️ طباعة'),
         h('button', { class: 'btn-primary', onClick: async () => {
           toast('جارٍ إنشاء PDF…'); try { await ExportService.toPdf(node, `${invoice.invoiceNumber || 'invoice'}.pdf`); toast('تم تنزيل PDF', 'success'); }
