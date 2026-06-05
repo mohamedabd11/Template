@@ -39,7 +39,9 @@ export const T = {
   // Table columns (by column key)
   col_index:      ['#', '#'],
   col_code:       ['الرمز', 'Code'],
+  col_codeSku:    ['الرمز', 'Code (SKU)'],
   col_description:['البيان', 'Description'],
+  col_natureOfGoods: ['تفاصيل السلع أو الخدمات', 'Nature of goods or service'],
   col_qty:        ['الكمية', 'Qty'],
   col_unit:       ['الوحدة', 'Unit'],
   col_unitPrice:  ['سعر الوحدة', 'Unit Price'],

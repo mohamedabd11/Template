@@ -27,10 +27,11 @@ export const qrBlocks = {
       <div class="qr-caption">${T.scanCaption[0]}<br>${T.scanCaption[1]}</div>
     </div>`,
 
-  // ZATCA: QR + invoice transaction code (+ scan note), as printed by the e-invoicing system.
+  // ZATCA: QR + invoice UUID + transaction code (+ scan note), as printed by the system.
   zatca: (c) => `
     <div class="qr qr--zatca">
       ${img(c)}
+      ${c.invoice.uuid ? `<div class="qr-uuid">${esc(c.invoice.uuid)}</div>` : ''}
       ${c.invoice.transactionCode ? `<div class="qr-txcode">Invoice Transaction Code: ${esc(c.invoice.transactionCode)}</div>` : ''}
       <div class="qr-caption">${T.scanCaption[1]}<br>${T.scanCaption[0]}</div>
     </div>`,

@@ -54,12 +54,14 @@
     },
     {
       "key": "code",
+      "labelKey": "codeSku",
       "label": "الرمز",
       "align": "center",
       "width": "8%"
     },
     {
       "key": "description",
+      "labelKey": "natureOfGoods",
       "label": "البيان",
       "align": "right",
       "width": "23%"

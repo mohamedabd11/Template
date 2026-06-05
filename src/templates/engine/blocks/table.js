@@ -31,7 +31,8 @@ function buildRows(c, rowClassFn = () => '') {
 }
 
 function head(c) {
-  return `<tr>${c.columns.map((col) => `<th style="text-align:${col.align || 'right'};width:${col.width || 'auto'}">${colLabel(col.key, esc(col.label))}</th>`).join('')}</tr>`;
+  // `labelKey` lets a template override the header wording without changing the data key.
+  return `<tr>${c.columns.map((col) => `<th style="text-align:${col.align || 'right'};width:${col.width || 'auto'}">${colLabel(col.labelKey || col.key, esc(col.label))}</th>`).join('')}</tr>`;
 }
 
 export const tableBlocks = {

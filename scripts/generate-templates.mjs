@@ -22,8 +22,8 @@ const cols = {
   // Detailed ZATCA invoice columns (labels resolved bilingually by the engine).
   zatca: [
     { key: 'index', label: '#', align: 'center', width: '3%' },
-    { key: 'code', label: 'الرمز', align: 'center', width: '8%' },
-    { key: 'description', label: 'البيان', align: 'right', width: '23%' },
+    { key: 'code', labelKey: 'codeSku', label: 'الرمز', align: 'center', width: '8%' },
+    { key: 'description', labelKey: 'natureOfGoods', label: 'البيان', align: 'right', width: '23%' },
     { key: 'qty', label: 'الكمية', align: 'center', width: '6%' },
     { key: 'unit', label: 'الوحدة', align: 'center', width: '7%' },
     { key: 'unitPrice', label: 'سعر الوحدة', align: 'center', width: '9%' },
