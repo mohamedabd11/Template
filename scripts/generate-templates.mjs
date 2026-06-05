@@ -23,15 +23,15 @@ const cols = {
   zatca: [
     { key: 'index', label: '#', align: 'center', width: '3%' },
     { key: 'code', label: 'الرمز', align: 'center', width: '8%' },
-    { key: 'description', label: 'البيان', align: 'right', width: '26%' },
+    { key: 'description', label: 'البيان', align: 'right', width: '23%' },
     { key: 'qty', label: 'الكمية', align: 'center', width: '6%' },
-    { key: 'unit', label: 'الوحدة', align: 'center', width: '5%' },
+    { key: 'unit', label: 'الوحدة', align: 'center', width: '7%' },
     { key: 'unitPrice', label: 'سعر الوحدة', align: 'center', width: '9%' },
     { key: 'discount', label: 'الخصم', align: 'center', width: '7%' },
     { key: 'subtotalExcl', label: 'الإجمالي قبل الضريبة', align: 'center', width: '10%' },
-    { key: 'taxRate', label: 'نسبة الضريبة', align: 'center', width: '5%' },
+    { key: 'taxRate', label: 'نسبة الضريبة', align: 'center', width: '7%' },
     { key: 'taxAmount', label: 'مبلغ الضريبة', align: 'center', width: '8%' },
-    { key: 'subtotalIncl', label: 'الإجمالي شامل الضريبة', align: 'center', width: '13%' },
+    { key: 'subtotalIncl', label: 'الإجمالي شامل الضريبة', align: 'center', width: '12%' },
   ],
 };
 

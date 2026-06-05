@@ -62,7 +62,7 @@
       "key": "description",
       "label": "البيان",
       "align": "right",
-      "width": "26%"
+      "width": "23%"
     },
     {
       "key": "qty",
@@ -74,7 +74,7 @@
       "key": "unit",
       "label": "الوحدة",
       "align": "center",
-      "width": "5%"
+      "width": "7%"
     },
     {
       "key": "unitPrice",
@@ -98,7 +98,7 @@
       "key": "taxRate",
       "label": "نسبة الضريبة",
       "align": "center",
-      "width": "5%"
+      "width": "7%"
     },
     {
       "key": "taxAmount",
@@ -110,7 +110,7 @@
       "key": "subtotalIncl",
       "label": "الإجمالي شامل الضريبة",
       "align": "center",
-      "width": "13%"
+      "width": "12%"
     }
   ]
 }
