@@ -64,7 +64,7 @@ export async function ImportPage() {
                 `✅ تم استخراج الفاتورة كاملة من XML المدمج (${res.items.length} بند). يمكنك المتابعة للمعاينة.`));
               out.appendChild(h('button', { class: 'btn-primary', onClick: () => finish(inv) }, 'متابعة إلى المعاينة'));
             } else {
-              showReview(out, res, 'pdf');
+              showReview(out, res, 'pdf', 'noxml');
             }
           } catch (e) { clear(out); out.appendChild(h('div', { class: 'text-rose-500 text-sm' }, 'تعذر قراءة الملف: ' + e.message)); }
         } }),
@@ -121,8 +121,15 @@ export async function ImportPage() {
     }
   }
 
-  function showReview(out, res, source) {
+  function showReview(out, res, source, note) {
     clear(out);
+    if (note === 'noxml') {
+      out.appendChild(h('div', { class: 'bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-3 text-sm mb-3' },
+        h('div', { class: 'font-bold mb-1' }, '⚠️ هذا الملف لا يحتوي فاتورة زاتكا إلكترونية (XML مدمج)'),
+        h('div', { class: 'text-xs leading-relaxed' },
+          'هذا النوع (مثل المستندات المطبوعة إلى PDF أو المستخلصات) لا يحوي بيانات منظّمة، لذا استُخرجت الحقول الأساسية من النص فقط — راجعها وأكمل البنود يدوياً. إن توفّر لديك ملف XML الأصلي، استخدم تبويب «استيراد XML» للحصول على استخراج كامل ودقيق.'),
+      ));
+    }
     const review = ReviewPanel(res);
     out.append(review, h('div', { class: 'mt-4 flex gap-2' },
       h('button', { class: 'btn-primary', onClick: () => {
