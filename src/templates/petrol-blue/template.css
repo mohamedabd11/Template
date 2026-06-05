@@ -1,0 +1,5 @@
+/* Petrol Blue — scoped identity */
+.tpl-petrol-blue{}
+.tpl-petrol-blue .hd--split .hd-divider{background:var(--c-primary);}
+.tpl-petrol-blue .tbl--striped thead th{background:var(--c-primary);}
+.tpl-petrol-blue .tot--bar .tot-bar-grand{background:var(--c-primary);}

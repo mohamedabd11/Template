@@ -141,6 +141,50 @@ const T = [
     fonts: { base: 'Tajawal', heading: 'Cairo' },
     L: { header: 'centered', customer: 'card', table: 'grid', totals: 'gold-frame', qr: 'captioned', footer: 'signature-stamp' },
     tags: ['retail', 'elegant', 'boutique'] },
+
+  // ---- Government / Official (formal, conservative colors for official entities) ----
+  { id: 'government-navy', name: 'حكومي كحلي', en: 'Government Navy', cat: 'Government',
+    theme: { primary: '#1e3a5f', accent: '#2c5282', line: '#d6deea', text: '#16243a', muted: '#5b6b80' },
+    fonts: { base: 'IBM Plex Sans Arabic', heading: 'IBM Plex Sans Arabic' },
+    L: { header: 'split', customer: 'labeled-rows', table: 'grid', totals: 'ledger', qr: 'framed', footer: 'signature-stamp' },
+    tags: ['government', 'official', 'navy', 'formal', 'رسمي'] },
+  { id: 'official-slate', name: 'رسمي إردوازي', en: 'Official Slate', cat: 'Government',
+    theme: { primary: '#334155', accent: '#475569', line: '#dde3ea', muted: '#64748b' },
+    fonts: { base: 'IBM Plex Sans Arabic', heading: 'IBM Plex Sans Arabic' },
+    L: { header: 'sidebar', customer: 'boxed', table: 'minimal-lines', totals: 'boxed-right', qr: 'corner', footer: 'bar' },
+    tags: ['government', 'official', 'slate', 'gray', 'رسمي'] },
+  { id: 'ministry-green', name: 'أخضر وزاري', en: 'Ministry Green', cat: 'Government',
+    theme: { primary: '#14532d', accent: '#15803d', line: '#d4e6d8', muted: '#5b7065' },
+    fonts: { base: 'Tajawal', heading: 'Cairo' },
+    L: { header: 'band', customer: 'card', table: 'dark-header', totals: 'boxed-right', qr: 'framed', footer: 'signature-stamp' },
+    tags: ['government', 'official', 'green', 'ministry', 'رسمي'] },
+  { id: 'burgundy-formal', name: 'عنابي رسمي', en: 'Burgundy Formal', cat: 'Government',
+    theme: { primary: '#7f1d1d', accent: '#9b2c2c', line: '#ecd9d9', muted: '#7a6060' },
+    fonts: { base: 'Tajawal', heading: 'Cairo' },
+    L: { header: 'stacked', customer: 'two-col', table: 'grid', totals: 'ledger', qr: 'framed', footer: 'signature-stamp' },
+    tags: ['government', 'official', 'burgundy', 'formal', 'رسمي'] },
+  { id: 'graphite-letter', name: 'جرافيت رسمي', en: 'Graphite Letterhead', cat: 'Government',
+    theme: { primary: '#111827', accent: '#374151', line: '#e3e6ea', muted: '#6b7280' },
+    fonts: { base: 'IBM Plex Sans Arabic', heading: 'IBM Plex Sans Arabic' },
+    L: { header: 'minimal-line', customer: 'labeled-rows', table: 'minimal-lines', totals: 'ledger', qr: 'plain', footer: 'centered-note' },
+    tags: ['government', 'official', 'graphite', 'minimal', 'letterhead', 'رسمي'] },
+
+  // ---- Additional formal Corporate / Executive (official palettes) ----
+  { id: 'petrol-blue', name: 'أزرق بترولي', en: 'Petrol Blue', cat: 'Corporate',
+    theme: { primary: '#0f4c5c', accent: '#0e7490', line: '#cfe0e4', muted: '#5a7177' },
+    fonts: { base: 'Tajawal', heading: 'Cairo' },
+    L: { header: 'split', customer: 'card', table: 'striped', totals: 'highlight-bar', qr: 'captioned', footer: 'centered-note' },
+    tags: ['corporate', 'petrol', 'teal', 'formal'] },
+  { id: 'steel-corporate', name: 'فولاذي كوربوريت', en: 'Steel Corporate', cat: 'Corporate',
+    theme: { primary: '#1e293b', accent: '#3b6ea5', line: '#dbe2ea', muted: '#5f6b7a' },
+    fonts: { base: 'IBM Plex Sans Arabic', heading: 'IBM Plex Sans Arabic' },
+    L: { header: 'darkbar', customer: 'boxed', table: 'dark-header', totals: 'stacked-card', qr: 'framed', footer: 'bar' },
+    tags: ['corporate', 'steel', 'formal', 'dark'] },
+  { id: 'bronze-classic', name: 'برونزي كلاسيك', en: 'Bronze Classic', cat: 'Executive',
+    theme: { primary: '#78350f', accent: '#a16207', line: '#ecdfcb', muted: '#7d6a54' },
+    fonts: { base: 'Tajawal', heading: 'Cairo' },
+    L: { header: 'ribbon', customer: 'card', table: 'grid', totals: 'boxed-right', qr: 'framed', footer: 'signature-stamp' },
+    tags: ['executive', 'bronze', 'classic', 'formal'] },
 ];
 
 // Per-template CSS identity (extra flourishes beyond the base/theme variables).
@@ -166,6 +210,34 @@ function css(t) {
 .tpl-${id} .tbl--minimal{font-family:'Courier New',monospace;}
 .tpl-${id} .tot--card .tot-card-grand{background:#0f172a;}`,
     'retail-elegant': `.tpl-${id} .hd-doctype{font-style:italic;}`,
+
+    // --- Government / formal: restrained letterhead details ---
+    'government-navy': `.tpl-${id} .hd--split .hd-divider{width:2px;}
+.tpl-${id} .hd-side--title{border-bottom:3px double var(--c-primary);padding-bottom:6px;}
+.tpl-${id} .tbl--grid thead th{background:var(--c-primary);color:#fff;border-color:var(--c-primary);}
+.tpl-${id} .tot--ledger .tot-ledger-grand td{border-color:var(--c-primary);}`,
+    'official-slate': `.tpl-${id} .hd-rail{border-end-end-radius:0;}
+.tpl-${id} .tbl--minimal thead th{color:var(--c-primary);border-bottom-color:var(--c-primary);}
+.tpl-${id} .cust--boxed .cust-box-head{letter-spacing:.03em;}`,
+    'ministry-green': `.tpl-${id} .hd--band{border-bottom:4px solid var(--c-accent);}
+.tpl-${id} .tbl--darkhead thead th{background:var(--c-primary);}
+.tpl-${id} .tot--boxed .tot-grand{background:var(--c-primary);}`,
+    'burgundy-formal': `.tpl-${id} .hd--stacked .hd-title{background:var(--c-primary);}
+.tpl-${id} .tbl--grid thead th{background:#fbeaea;color:var(--c-primary);border-color:#e3c4c4;}
+.tpl-${id} .tot--ledger .tot-ledger-grand td{border-color:var(--c-primary);color:var(--c-primary);}`,
+    'graphite-letter': `.tpl-${id}{font-size:10.5pt;}
+.tpl-${id} .inv-header{border-top:4px solid var(--c-primary);padding-top:6mm;}
+.tpl-${id} .hd--minimal .hd-min-row{border-bottom-width:2px;}
+.tpl-${id} .tbl--minimal thead th{letter-spacing:.06em;}`,
+    'petrol-blue': `.tpl-${id} .hd--split .hd-divider{background:var(--c-primary);}
+.tpl-${id} .tbl--striped thead th{background:var(--c-primary);}
+.tpl-${id} .tot--bar .tot-bar-grand{background:var(--c-primary);}`,
+    'steel-corporate': `.tpl-${id} .hd--darkbar{background:var(--c-primary);border-bottom-color:var(--c-accent);}
+.tpl-${id} .tbl--darkhead thead th{background:var(--c-primary);}`,
+    'bronze-classic': `.tpl-${id} .hd--ribbon{border-top-color:var(--c-accent);}
+.tpl-${id} .hd-doctype{letter-spacing:.05em;}
+.tpl-${id} .tbl--grid thead th{background:#f6efe3;color:var(--c-primary);border-color:#e0d2bb;}
+.tpl-${id} .tot--boxed .tot-grand{background:var(--c-primary);}`,
   };
   return base + (extras[id] || `.tpl-${id} .hd-doctype{}\n`);
 }

@@ -252,6 +252,116 @@
         "boutique"
       ],
       "builtin": true
+    },
+    {
+      "id": "government-navy",
+      "name": "حكومي كحلي",
+      "nameEn": "Government Navy",
+      "category": "Government",
+      "tags": [
+        "government",
+        "official",
+        "navy",
+        "formal",
+        "رسمي"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "official-slate",
+      "name": "رسمي إردوازي",
+      "nameEn": "Official Slate",
+      "category": "Government",
+      "tags": [
+        "government",
+        "official",
+        "slate",
+        "gray",
+        "رسمي"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "ministry-green",
+      "name": "أخضر وزاري",
+      "nameEn": "Ministry Green",
+      "category": "Government",
+      "tags": [
+        "government",
+        "official",
+        "green",
+        "ministry",
+        "رسمي"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "burgundy-formal",
+      "name": "عنابي رسمي",
+      "nameEn": "Burgundy Formal",
+      "category": "Government",
+      "tags": [
+        "government",
+        "official",
+        "burgundy",
+        "formal",
+        "رسمي"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "graphite-letter",
+      "name": "جرافيت رسمي",
+      "nameEn": "Graphite Letterhead",
+      "category": "Government",
+      "tags": [
+        "government",
+        "official",
+        "graphite",
+        "minimal",
+        "letterhead",
+        "رسمي"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "petrol-blue",
+      "name": "أزرق بترولي",
+      "nameEn": "Petrol Blue",
+      "category": "Corporate",
+      "tags": [
+        "corporate",
+        "petrol",
+        "teal",
+        "formal"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "steel-corporate",
+      "name": "فولاذي كوربوريت",
+      "nameEn": "Steel Corporate",
+      "category": "Corporate",
+      "tags": [
+        "corporate",
+        "steel",
+        "formal",
+        "dark"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "bronze-classic",
+      "name": "برونزي كلاسيك",
+      "nameEn": "Bronze Classic",
+      "category": "Executive",
+      "tags": [
+        "executive",
+        "bronze",
+        "classic",
+        "formal"
+      ],
+      "builtin": true
     }
   ]
 }

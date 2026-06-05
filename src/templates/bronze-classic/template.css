@@ -1,0 +1,6 @@
+/* Bronze Classic — scoped identity */
+.tpl-bronze-classic{}
+.tpl-bronze-classic .hd--ribbon{border-top-color:var(--c-accent);}
+.tpl-bronze-classic .hd-doctype{letter-spacing:.05em;}
+.tpl-bronze-classic .tbl--grid thead th{background:#f6efe3;color:var(--c-primary);border-color:#e0d2bb;}
+.tpl-bronze-classic .tot--boxed .tot-grand{background:var(--c-primary);}

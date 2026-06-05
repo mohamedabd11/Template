@@ -1,0 +1,5 @@
+/* Ministry Green — scoped identity */
+.tpl-ministry-green{}
+.tpl-ministry-green .hd--band{border-bottom:4px solid var(--c-accent);}
+.tpl-ministry-green .tbl--darkhead thead th{background:var(--c-primary);}
+.tpl-ministry-green .tot--boxed .tot-grand{background:var(--c-primary);}

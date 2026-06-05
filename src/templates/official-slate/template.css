@@ -1,0 +1,5 @@
+/* Official Slate — scoped identity */
+.tpl-official-slate{}
+.tpl-official-slate .hd-rail{border-end-end-radius:0;}
+.tpl-official-slate .tbl--minimal thead th{color:var(--c-primary);border-bottom-color:var(--c-primary);}
+.tpl-official-slate .cust--boxed .cust-box-head{letter-spacing:.03em;}

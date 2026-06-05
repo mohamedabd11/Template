@@ -1,0 +1,84 @@
+{
+  "id": "ministry-green",
+  "name": "أخضر وزاري",
+  "nameEn": "Ministry Green",
+  "category": "Government",
+  "tags": [
+    "government",
+    "official",
+    "green",
+    "ministry",
+    "رسمي"
+  ],
+  "builtin": true,
+  "theme": {
+    "text": "#0f172a",
+    "muted": "#5b7065",
+    "bg": "#ffffff",
+    "primary": "#14532d",
+    "accent": "#15803d",
+    "line": "#d4e6d8"
+  },
+  "fonts": {
+    "base": "Tajawal",
+    "heading": "Cairo"
+  },
+  "layout": {
+    "header": {
+      "variant": "band"
+    },
+    "customer": {
+      "variant": "card"
+    },
+    "table": {
+      "variant": "dark-header"
+    },
+    "totals": {
+      "variant": "boxed-right"
+    },
+    "qr": {
+      "variant": "framed"
+    },
+    "footer": {
+      "variant": "signature-stamp"
+    }
+  },
+  "columns": [
+    {
+      "key": "index",
+      "label": "#",
+      "align": "center",
+      "width": "6%"
+    },
+    {
+      "key": "description",
+      "label": "البيان",
+      "align": "right",
+      "width": "40%"
+    },
+    {
+      "key": "qty",
+      "label": "الكمية",
+      "align": "center",
+      "width": "12%"
+    },
+    {
+      "key": "unitPrice",
+      "label": "سعر الوحدة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "taxAmount",
+      "label": "الضريبة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "total",
+      "label": "الإجمالي",
+      "align": "center",
+      "width": "14%"
+    }
+  ]
+}

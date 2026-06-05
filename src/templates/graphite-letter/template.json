@@ -1,0 +1,85 @@
+{
+  "id": "graphite-letter",
+  "name": "جرافيت رسمي",
+  "nameEn": "Graphite Letterhead",
+  "category": "Government",
+  "tags": [
+    "government",
+    "official",
+    "graphite",
+    "minimal",
+    "letterhead",
+    "رسمي"
+  ],
+  "builtin": true,
+  "theme": {
+    "text": "#0f172a",
+    "muted": "#6b7280",
+    "bg": "#ffffff",
+    "primary": "#111827",
+    "accent": "#374151",
+    "line": "#e3e6ea"
+  },
+  "fonts": {
+    "base": "IBM Plex Sans Arabic",
+    "heading": "IBM Plex Sans Arabic"
+  },
+  "layout": {
+    "header": {
+      "variant": "minimal-line"
+    },
+    "customer": {
+      "variant": "labeled-rows"
+    },
+    "table": {
+      "variant": "minimal-lines"
+    },
+    "totals": {
+      "variant": "ledger"
+    },
+    "qr": {
+      "variant": "plain"
+    },
+    "footer": {
+      "variant": "centered-note"
+    }
+  },
+  "columns": [
+    {
+      "key": "index",
+      "label": "#",
+      "align": "center",
+      "width": "6%"
+    },
+    {
+      "key": "description",
+      "label": "البيان",
+      "align": "right",
+      "width": "40%"
+    },
+    {
+      "key": "qty",
+      "label": "الكمية",
+      "align": "center",
+      "width": "12%"
+    },
+    {
+      "key": "unitPrice",
+      "label": "سعر الوحدة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "taxAmount",
+      "label": "الضريبة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "total",
+      "label": "الإجمالي",
+      "align": "center",
+      "width": "14%"
+    }
+  ]
+}

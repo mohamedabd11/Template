@@ -1,0 +1,5 @@
+/* Burgundy Formal — scoped identity */
+.tpl-burgundy-formal{}
+.tpl-burgundy-formal .hd--stacked .hd-title{background:var(--c-primary);}
+.tpl-burgundy-formal .tbl--grid thead th{background:#fbeaea;color:var(--c-primary);border-color:#e3c4c4;}
+.tpl-burgundy-formal .tot--ledger .tot-ledger-grand td{border-color:var(--c-primary);color:var(--c-primary);}

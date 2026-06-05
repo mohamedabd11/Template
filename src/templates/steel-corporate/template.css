@@ -1,0 +1,4 @@
+/* Steel Corporate — scoped identity */
+.tpl-steel-corporate{}
+.tpl-steel-corporate .hd--darkbar{background:var(--c-primary);border-bottom-color:var(--c-accent);}
+.tpl-steel-corporate .tbl--darkhead thead th{background:var(--c-primary);}

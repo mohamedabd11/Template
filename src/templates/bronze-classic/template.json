@@ -1,0 +1,83 @@
+{
+  "id": "bronze-classic",
+  "name": "برونزي كلاسيك",
+  "nameEn": "Bronze Classic",
+  "category": "Executive",
+  "tags": [
+    "executive",
+    "bronze",
+    "classic",
+    "formal"
+  ],
+  "builtin": true,
+  "theme": {
+    "text": "#0f172a",
+    "muted": "#7d6a54",
+    "bg": "#ffffff",
+    "primary": "#78350f",
+    "accent": "#a16207",
+    "line": "#ecdfcb"
+  },
+  "fonts": {
+    "base": "Tajawal",
+    "heading": "Cairo"
+  },
+  "layout": {
+    "header": {
+      "variant": "ribbon"
+    },
+    "customer": {
+      "variant": "card"
+    },
+    "table": {
+      "variant": "grid"
+    },
+    "totals": {
+      "variant": "boxed-right"
+    },
+    "qr": {
+      "variant": "framed"
+    },
+    "footer": {
+      "variant": "signature-stamp"
+    }
+  },
+  "columns": [
+    {
+      "key": "index",
+      "label": "#",
+      "align": "center",
+      "width": "6%"
+    },
+    {
+      "key": "description",
+      "label": "البيان",
+      "align": "right",
+      "width": "40%"
+    },
+    {
+      "key": "qty",
+      "label": "الكمية",
+      "align": "center",
+      "width": "12%"
+    },
+    {
+      "key": "unitPrice",
+      "label": "سعر الوحدة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "taxAmount",
+      "label": "الضريبة",
+      "align": "center",
+      "width": "14%"
+    },
+    {
+      "key": "total",
+      "label": "الإجمالي",
+      "align": "center",
+      "width": "14%"
+    }
+  ]
+}
