@@ -64,13 +64,13 @@
       "labelKey": "natureOfGoods",
       "label": "البيان",
       "align": "right",
-      "width": "23%"
+      "width": "21%"
     },
     {
       "key": "qty",
       "label": "الكمية",
       "align": "center",
-      "width": "6%"
+      "width": "8%"
     },
     {
       "key": "unit",

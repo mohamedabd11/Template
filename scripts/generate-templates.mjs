@@ -23,8 +23,8 @@ const cols = {
   zatca: [
     { key: 'index', label: '#', align: 'center', width: '3%' },
     { key: 'code', labelKey: 'codeSku', label: 'الرمز', align: 'center', width: '8%' },
-    { key: 'description', labelKey: 'natureOfGoods', label: 'البيان', align: 'right', width: '23%' },
-    { key: 'qty', label: 'الكمية', align: 'center', width: '6%' },
+    { key: 'description', labelKey: 'natureOfGoods', label: 'البيان', align: 'right', width: '21%' },
+    { key: 'qty', label: 'الكمية', align: 'center', width: '8%' },
     { key: 'unit', label: 'الوحدة', align: 'center', width: '7%' },
     { key: 'unitPrice', label: 'سعر الوحدة', align: 'center', width: '9%' },
     { key: 'discount', label: 'الخصم', align: 'center', width: '7%' },

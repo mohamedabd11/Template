@@ -279,10 +279,10 @@
 
 /* Wide items table for the detailed layout */
 .tpl-zatca .tbl, .tpl-zatca-green .tbl, .tpl-zatca-gray .tbl { font-size: 7.6pt; table-layout: fixed; width: 100%; }
-/* Data cells may wrap long tokens; headers must keep Arabic words intact (no per-letter break). */
-.tpl-zatca .tbl td, .tpl-zatca-green .tbl td, .tpl-zatca-gray .tbl td { padding: 3px 4px; word-break: break-word; overflow-wrap: anywhere; vertical-align: middle; }
+/* Data cells: numbers never wrap; only the description column wraps. */
+.tpl-zatca .tbl td, .tpl-zatca-green .tbl td, .tpl-zatca-gray .tbl td { padding: 3px 4px; vertical-align: middle; white-space: nowrap; }
 .tpl-zatca .tbl th, .tpl-zatca-green .tbl th, .tpl-zatca-gray .tbl th { padding: 4px 3px; vertical-align: middle; line-height: 1.25; overflow-wrap: normal; word-break: keep-all; hyphens: none; }
-.tpl-zatca .tbl td:nth-child(3), .tpl-zatca-green .tbl td:nth-child(3), .tpl-zatca-gray .tbl td:nth-child(3) { text-align: right; }
+.tpl-zatca .tbl td:nth-child(3), .tpl-zatca-green .tbl td:nth-child(3), .tpl-zatca-gray .tbl td:nth-child(3) { text-align: right; white-space: normal; word-break: break-word; overflow-wrap: anywhere; }
 .tpl-zatca .tbl--grid thead th, .tpl-zatca-green .tbl--grid thead th, .tpl-zatca-gray .tbl--grid thead th { background: var(--c-primary); color: #fff; border-color: var(--c-primary); }
 
 /* Statement totals */
