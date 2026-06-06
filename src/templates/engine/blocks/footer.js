@@ -60,10 +60,12 @@ export const footerBlocks = {
       co.email && `E-mail: ${co.email}`,
       co.website && `Website: ${co.website}`,
     ].filter(Boolean).map(esc).join(' &nbsp;-&nbsp; ');
-    // Bank/payment details — manually entered; always shown on this footer so it's editable.
+    // Bank/payment details — shown ONLY if the user filled at least one field; hidden otherwise.
+    const hasBank = [co.payeeName, co.accountNumber, co.bankName, co.bankBranch, co.iban, co.swift]
+      .some((v) => v && String(v).trim());
     const dash = (v) => (v == null || v === '' ? '—' : esc(v));
     const bankCell = (key, val) => `<div class="zd-cell"><span class="zd-lbl">${bl(key)}</span><span class="zd-val">${dash(val)}</span></div>`;
-    const bank = `
+    const bank = hasBank ? `
       <div class="zd ft-bank">
         <div class="zd-head"><span>${T.paymentDetails[1]}</span><span>${T.paymentDetails[0]}</span></div>
         <div class="zd-grid"><div class="zd-cell zd-cell--wide"><span class="zd-lbl">${bl('payeeName')}</span><span class="zd-val">${dash(co.payeeName)}</span></div></div>
@@ -74,7 +76,7 @@ export const footerBlocks = {
           ${bankCell('iban', co.iban)}
           ${bankCell('swift', co.swift)}
         </div>
-      </div>`;
+      </div>` : '';
     return `
       <div class="ft ft--address">
         <div class="ft-cg">${T.computerGenerated[1]} — ${T.computerGenerated[0]}</div>
