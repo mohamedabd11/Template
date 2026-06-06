@@ -75,6 +75,15 @@ export const T = {
   grossTotal:     ['الإجمالي شامل الضريبة', 'Gross Total (Incl. VAT)'],
   balanceDue:     ['المبلغ المستحق', 'Balance Due'],
   computerGenerated: ['هذا مستند صادر إلكترونياً، لا يتطلب توقيعاً.', 'This is a computer generated document, No Signature required.'],
+
+  // Bank / payment details (entered manually — not in ZATCA XML)
+  paymentDetails: ['تفاصيل الدفع', 'Payment Details'],
+  payeeName:      ['اسم المستفيد من الحساب', 'Payee Name'],
+  accountNumber:  ['رقم الحساب', 'Account Number'],
+  bank:           ['المصرف', 'Bank'],
+  branch:         ['الفرع', 'Branch'],
+  iban:           ['رقم الآيبان', 'IBAN'],
+  swift:          ['رقم السويفت', 'Swift'],
 };
 
 /** Arabic primary + English secondary, as HTML. */

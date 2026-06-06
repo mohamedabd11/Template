@@ -321,3 +321,25 @@
 .ft--address .ft-addr-rule { height: 2px; background: var(--c-primary); margin: 5px 0; }
 .ft--address .ft-addr { font-size: 8.5pt; color: var(--c-primary); font-weight: 700; }
 .ft--address .ft-contact2 { font-size: 8pt; color: var(--c-muted); margin-top: 2px; }
+
+/* Bank / payment details table (ZATCA footer) */
+.ft-bank { margin-top: 4mm; text-align: start; }
+.zd-grid--bank { grid-template-columns: repeat(5, 1fr); }
+.zd-grid--bank .zd-cell { flex-direction: column; align-items: stretch; }
+.zd-grid--bank .zd-lbl { width: 100%; height: 30px; min-width: 0; border-inline-end: 0; border-bottom: 1px solid var(--c-line); display: flex; flex-direction: column; justify-content: center; padding: 2px 5px; font-size: 6.9pt; line-height: 1.12; overflow: hidden; }
+.zd-grid--bank .zd-lbl .bl-en { display: block; margin: 0; }
+.zd-grid--bank .zd-val { width: 100%; padding: 4px 5px; font-size: 7.6pt; word-break: break-all; }
+
+/* Compact spacing for the dense ZATCA layout so a typical invoice fits on one A4 page. */
+.tpl-zatca .inv-customer, .tpl-zatca-green .inv-customer, .tpl-zatca-gray .inv-customer { margin-top: 3mm; }
+.tpl-zatca .inv-body, .tpl-zatca-green .inv-body, .tpl-zatca-gray .inv-body { margin-top: 3mm; }
+.tpl-zatca .inv-summary, .tpl-zatca-green .inv-summary, .tpl-zatca-gray .inv-summary { margin-top: 3mm; }
+.tpl-zatca .zd, .tpl-zatca-green .zd, .tpl-zatca-gray .zd { margin-bottom: 2.5mm; }
+.tpl-zatca .zd-cell, .tpl-zatca-green .zd-cell, .tpl-zatca-gray .zd-cell { min-height: 0; }
+.tpl-zatca .zd-lbl, .tpl-zatca .zd-val,
+.tpl-zatca-green .zd-lbl, .tpl-zatca-green .zd-val,
+.tpl-zatca-gray .zd-lbl, .tpl-zatca-gray .zd-val { padding-top: 2px; padding-bottom: 2px; }
+.tpl-zatca .tot--statement .st-en, .tpl-zatca .tot--statement .st-val, .tpl-zatca .tot--statement .st-ar,
+.tpl-zatca-green .tot--statement .st-en, .tpl-zatca-green .tot--statement .st-val, .tpl-zatca-green .tot--statement .st-ar,
+.tpl-zatca-gray .tot--statement .st-en, .tpl-zatca-gray .tot--statement .st-val, .tpl-zatca-gray .tot--statement .st-ar { padding-top: 2.5px; padding-bottom: 2.5px; }
+.tpl-zatca .ft--address, .tpl-zatca-green .ft--address, .tpl-zatca-gray .ft--address { padding-top: 3mm; padding-bottom: 3mm; }

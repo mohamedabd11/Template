@@ -9,10 +9,12 @@ export class Company {
     address = '', phone = '', email = '', website = '', logoDataUrl = '',
     buildingNumber = '', street = '', district = '', additionalNumber = '',
     postalCode = '', city = '', country = '',
+    payeeName = '', accountNumber = '', bankName = '', bankBranch = '', iban = '', swift = '',
   } = {}) {
     Object.assign(this, {
       name, nameEn, vatNumber, crNumber, address, phone, email, website, logoDataUrl,
       buildingNumber, street, district, additionalNumber, postalCode, city, country,
+      payeeName, accountNumber, bankName, bankBranch, iban, swift,
     });
   }
 

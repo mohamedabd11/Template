@@ -51,7 +51,12 @@ body { background: #f1f5f9; color: #0f172a; }
 @media print {
   body.printing > *:not(#print-root) { display: none !important; }
   #print-root { display: block; }
-  #print-root .invoice-page { box-shadow: none; margin: 0; width: 210mm; }
+  /* Don't force a fixed 297mm page height — let content flow so the footer/bank details stay
+     with the invoice instead of being pushed to a separate page. */
+  #print-root .invoice-page { box-shadow: none; margin: 0; width: 210mm; min-height: 0; }
+  /* Keep logical blocks from being split across pages. */
+  #print-root :is(.inv-summary, .inv-footer, .ft, .ft-bank, .tot, .zd, .qr) { break-inside: avoid; page-break-inside: avoid; }
+  #print-root .tbl tr { break-inside: avoid; page-break-inside: avoid; }
   @page { size: A4; margin: 0; }
 }
 

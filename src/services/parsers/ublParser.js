@@ -105,6 +105,17 @@ export function parseUblInvoice(xmlString) {
   const company = party(firstDesc(root, 'AccountingSupplierParty'));
   const customer = party(firstDesc(root, 'AccountingCustomerParty'));
 
+  // Bank/payment details from PaymentMeans (when the XML includes them).
+  const pm = firstDesc(root, 'PaymentMeans');
+  if (pm) {
+    const acc = firstDesc(pm, 'PayeeFinancialAccount');
+    if (acc) {
+      company.iban = dtext(acc, 'ID') || '';
+      company.payeeName = dtext(acc, 'Name') || '';
+      company.bankName = dtext(firstDesc(acc, 'FinancialInstitutionBranch'), 'Name') || '';
+    }
+  }
+
   const lmt = firstDesc(root, 'LegalMonetaryTotal');
   const subtotal = numOf(dtext(lmt, 'TaxExclusiveAmount')) ?? numOf(dtext(lmt, 'LineExtensionAmount'));
   const total = numOf(dtext(lmt, 'TaxInclusiveAmount')) ?? numOf(dtext(lmt, 'PayableAmount'));

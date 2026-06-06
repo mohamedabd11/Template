@@ -57,6 +57,16 @@ export function InvoiceForm(initial = {}) {
         field('الهاتف', 'company.phone', co.phone),
       ),
     ),
+    section('بيانات الدفع البنكية (اختياري)',
+      grid(
+        field('اسم المستفيد', 'company.payeeName', co.payeeName),
+        field('رقم الحساب', 'company.accountNumber', co.accountNumber),
+        field('المصرف', 'company.bankName', co.bankName),
+        field('الفرع', 'company.bankBranch', co.bankBranch),
+        field('رقم الآيبان (IBAN)', 'company.iban', co.iban),
+        field('رقم السويفت (SWIFT)', 'company.swift', co.swift),
+      ),
+    ),
     section('بيانات العميل',
       grid(
         field('اسم العميل', 'customer.name', cu.name),
@@ -96,7 +106,8 @@ export function InvoiceForm(initial = {}) {
     return {
       invoiceNumber: val('invoiceNumber'), date: val('date'), dueDate: val('dueDate'),
       poNumber: val('poNumber'), notes: val('notes'),
-      company: { name: val('company.name'), nameEn: val('company.nameEn'), vatNumber: val('company.vatNumber'), crNumber: val('company.crNumber'), address: val('company.address'), phone: val('company.phone'), logoDataUrl: logoUploader.getLogo() },
+      company: { name: val('company.name'), nameEn: val('company.nameEn'), vatNumber: val('company.vatNumber'), crNumber: val('company.crNumber'), address: val('company.address'), phone: val('company.phone'), logoDataUrl: logoUploader.getLogo(),
+        payeeName: val('company.payeeName'), accountNumber: val('company.accountNumber'), bankName: val('company.bankName'), bankBranch: val('company.bankBranch'), iban: val('company.iban'), swift: val('company.swift') },
       customer: { name: val('customer.name'), vatNumber: val('customer.vatNumber'), address: val('customer.address'), phone: val('customer.phone') },
       items,
     };
