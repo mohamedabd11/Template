@@ -139,8 +139,8 @@
 
 .cust--card { border: 1px solid var(--c-line); border-radius: 10px; padding: 5mm; max-width: 95mm; border-inline-start: 4px solid var(--c-primary); }
 .cust--twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
-.cust--twocol .cust-col--meta { background: color-mix(in srgb, var(--c-primary) 6%, #fff); border-radius: 10px; padding: 4mm; }
-.cust--strip { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: color-mix(in srgb, var(--c-primary) 6%, #fff); padding: 3mm 4mm; border-radius: 8px; }
+.cust--twocol .cust-col--meta { background: var(--c-soft); border-radius: 10px; padding: 4mm; }
+.cust--strip { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: var(--c-soft); padding: 3mm 4mm; border-radius: 8px; }
 .cust--strip .cust-chip { font-size: 8pt; background: #fff; border: 1px solid var(--c-line); border-radius: 999px; padding: 2px 8px; }
 .cust--boxed { border: 1px solid var(--c-line); border-radius: 10px; overflow: hidden; max-width: 95mm; }
 .cust--boxed .cust-box-head { background: var(--c-primary); color: #fff; padding: 2mm 4mm; font-weight: 700; font-size: 9pt; }
@@ -156,11 +156,11 @@
 .tbl td { padding: 6px 8px; }
 
 .tbl--striped thead th { background: var(--c-primary); color: #fff; }
-.tbl--striped tbody tr.is-odd { background: color-mix(in srgb, var(--c-primary) 5%, #fff); }
+.tbl--striped tbody tr.is-odd { background: var(--c-soft); }
 .tbl--striped tbody td { border-bottom: 1px solid var(--c-line); }
 
 .tbl--grid th, .tbl--grid td { border: 1px solid var(--c-line); }
-.tbl--grid thead th { background: color-mix(in srgb, var(--c-primary) 10%, #fff); color: var(--c-primary); }
+.tbl--grid thead th { background: var(--c-soft); color: var(--c-primary); }
 
 .tbl--minimal thead th { border-bottom: 2px solid var(--c-text); color: var(--c-muted); font-size: 8.5pt; text-transform: uppercase; letter-spacing: .04em; }
 .tbl--minimal tbody td { border-bottom: 1px solid var(--c-line); }
@@ -177,11 +177,11 @@
 
 .tbl--blueprint { font-family: 'Courier New', monospace; }
 .tbl--blueprint th, .tbl--blueprint td { border: 1px dashed var(--c-primary); }
-.tbl--blueprint thead th { background: color-mix(in srgb, var(--c-primary) 8%, #fff); }
+.tbl--blueprint thead th { background: var(--c-soft); }
 
 .tbl--boarding { border-collapse: separate; border-spacing: 0 5px; }
 .tbl--boarding thead th { background: var(--c-primary); color: #fff; }
-.tbl--boarding tbody tr.bp-row td { background: color-mix(in srgb, var(--c-accent) 6%, #fff); border-top: 1px dashed var(--c-accent); border-bottom: 1px dashed var(--c-accent); }
+.tbl--boarding tbody tr.bp-row td { background: var(--c-soft-accent); border-top: 1px dashed var(--c-accent); border-bottom: 1px dashed var(--c-accent); }
 
 /* ---------- Totals variants ---------- */
 .tot { font-size: 10pt; }
@@ -269,7 +269,7 @@
 .zd-grid--dates { grid-template-columns: repeat(6, 1fr); }
 .zd-cell { background: #fff; display: flex; align-items: stretch; font-size: 8.5pt; min-height: 22px; }
 .zd-cell--wide { grid-column: 1 / -1; }
-.zd-lbl { background: color-mix(in srgb, var(--c-primary) 7%, #fff); color: var(--c-primary); padding: 3px 7px; min-width: 96px; font-weight: 700; display: flex; align-items: center; }
+.zd-lbl { background: var(--c-soft); color: var(--c-primary); padding: 3px 7px; min-width: 96px; font-weight: 700; display: flex; align-items: center; }
 /* Dates row: compact label-on-top, value-below cells. Fixed label height keeps the divider
    line aligned across all cells regardless of how many lines each label takes. */
 .zd-grid--dates .zd-cell { flex-direction: column; align-items: stretch; }
@@ -292,7 +292,7 @@
 .tot--statement .st-en { padding: 4px 8px; color: var(--c-muted); text-align: left; font-size: 8pt; }
 .tot--statement .st-val { padding: 4px 8px; font-weight: 800; text-align: center; border-inline: 1px solid var(--c-line); }
 .tot--statement .st-ar { padding: 4px 8px; color: var(--c-muted); text-align: right; font-size: 8pt; }
-.tot--statement .st-row.is-gross { background: color-mix(in srgb, var(--c-primary) 8%, #fff); }
+.tot--statement .st-row.is-gross { background: var(--c-soft); }
 .tot--statement .st-row.is-gross .st-val { color: var(--c-primary); }
 .tot--statement .st-row.is-balance { background: var(--c-primary); }
 .tot--statement .st-row.is-balance .st-val { color: #fff; }

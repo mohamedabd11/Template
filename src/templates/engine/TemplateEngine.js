@@ -47,18 +47,32 @@ function pick(region, variant) {
   return set[variant] || set[Object.keys(set)[0]];
 }
 
+/** Blend a hex color toward white by `pct` (0..1 of the color). Returns rgb() — html2canvas-safe. */
+function tint(hex, pct) {
+  let h = String(hex || '#1c3c7a').replace('#', '');
+  if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+  const r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
+  const m = (c) => Math.round((isNaN(c) ? 0 : c) * pct + 255 * (1 - pct));
+  return `rgb(${m(r)}, ${m(g)}, ${m(b)})`;
+}
+
 /** Create an empty A4 page element with the template's theme CSS variables applied. */
 function newPage(template, ctx, extraClass = '') {
   const page = document.createElement('div');
   page.className = `invoice-page tpl-${template.id}${extraClass ? ` ${extraClass}` : ''}`;
   page.setAttribute('dir', 'rtl');
   page.lang = 'ar';
-  page.style.setProperty('--c-primary', ctx.theme.primary || '#1e3a8a');
-  page.style.setProperty('--c-accent', ctx.theme.accent || ctx.theme.primary || '#3b82f6');
+  const primary = ctx.theme.primary || '#1e3a8a';
+  const accent = ctx.theme.accent || primary;
+  page.style.setProperty('--c-primary', primary);
+  page.style.setProperty('--c-accent', accent);
   page.style.setProperty('--c-text', ctx.theme.text || '#0f172a');
   page.style.setProperty('--c-muted', ctx.theme.muted || '#64748b');
   page.style.setProperty('--c-bg', ctx.theme.bg || '#ffffff');
   page.style.setProperty('--c-line', ctx.theme.line || '#e2e8f0');
+  // Pre-computed light tints (replace CSS color-mix() which html2canvas can't parse).
+  page.style.setProperty('--c-soft', tint(primary, 0.08));
+  page.style.setProperty('--c-soft-accent', tint(accent, 0.07));
   page.style.setProperty('--font-base', ctx.fonts.base || 'Tajawal');
   page.style.setProperty('--font-heading', ctx.fonts.heading || 'Cairo');
   applyLetterhead(page, ctx.letterhead);
