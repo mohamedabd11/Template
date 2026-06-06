@@ -1,0 +1,31 @@
+{
+  "invoiceNumber": "INV-2026-00042",
+  "date": "2026-06-01",
+  "dueDate": "2026-06-15",
+  "poNumber": "PO-7781",
+  "currency": "SAR",
+  "notes": "تشمل الأسعار ضريبة القيمة المضافة 15%. يرجى السداد خلال 14 يوماً من تاريخ الفاتورة.",
+  "company": {
+    "name": "مؤسسة الأفق للمقاولات",
+    "nameEn": "Al-Ufuq Contracting Est.",
+    "vatNumber": "300012345600003",
+    "crNumber": "1010234567",
+    "address": "طريق الملك فهد، الرياض، المملكة العربية السعودية",
+    "phone": "+966 11 234 5678",
+    "email": "info@alufuq.sa"
+  },
+  "customer": {
+    "name": "شركة النخبة التجارية",
+    "vatNumber": "310098765400003",
+    "address": "حي العليا، الرياض",
+    "phone": "+966 50 111 2233",
+    "email": "accounts@alnukhba.sa"
+  },
+  "items": [
+    { "description": "أعمال تأسيس خرسانية - الدور الأرضي", "qty": 120, "unitPrice": 85, "taxRate": 0.15, "discount": 0 },
+    { "description": "توريد وتركيب حديد تسليح", "qty": 8, "unitPrice": 2750, "taxRate": 0.15, "discount": 500 },
+    { "description": "أعمال السباكة والصرف", "qty": 1, "unitPrice": 14500, "taxRate": 0.15, "discount": 0 },
+    { "description": "خدمات إشراف هندسي - شهرية", "qty": 3, "unitPrice": 6000, "taxRate": 0.15, "discount": 0 }
+  ],
+  "qrContent": "AScZhNmE2KrYsdmK2YIg2YTZhNmF2YLYp9mI2YTYp9iqAg8zMDAwMTIzNDU2MDAwMDMDFDIwMjYtMDYtMDFUMDA6MDA6MDBaBAg3NjA5Mi41MAUHOTkyNS4xMQ=="
+}

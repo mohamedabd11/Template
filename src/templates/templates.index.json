@@ -1,0 +1,51 @@
+{
+  "templates": [
+    {
+      "id": "zatca",
+      "name": "فاتورة اليمامة",
+      "nameEn": "Al Yamama Invoice",
+      "category": "Government",
+      "tags": [
+        "government",
+        "zatca",
+        "official",
+        "detailed",
+        "رسمي",
+        "زاتكا"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "zatca-green",
+      "name": "فاتورة اليمامة - أخضر",
+      "nameEn": "Al Yamama Invoice - Green",
+      "category": "Government",
+      "tags": [
+        "government",
+        "zatca",
+        "official",
+        "detailed",
+        "green",
+        "رسمي",
+        "زاتكا"
+      ],
+      "builtin": true
+    },
+    {
+      "id": "zatca-gray",
+      "name": "فاتورة اليمامة - رمادي",
+      "nameEn": "Al Yamama Invoice - Gray",
+      "category": "Government",
+      "tags": [
+        "government",
+        "zatca",
+        "official",
+        "detailed",
+        "gray",
+        "رسمي",
+        "زاتكا"
+      ],
+      "builtin": true
+    }
+  ]
+}

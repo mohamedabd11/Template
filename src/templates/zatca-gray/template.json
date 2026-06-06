@@ -1,0 +1,118 @@
+{
+  "id": "zatca-gray",
+  "name": "فاتورة اليمامة - رمادي",
+  "nameEn": "Al Yamama Invoice - Gray",
+  "category": "Government",
+  "tags": [
+    "government",
+    "zatca",
+    "official",
+    "detailed",
+    "gray",
+    "رسمي",
+    "زاتكا"
+  ],
+  "builtin": true,
+  "theme": {
+    "text": "#1f2937",
+    "muted": "#6b7280",
+    "bg": "#ffffff",
+    "primary": "#374151",
+    "accent": "#4b5563",
+    "line": "#dde1e7"
+  },
+  "fonts": {
+    "base": "IBM Plex Sans Arabic",
+    "heading": "IBM Plex Sans Arabic"
+  },
+  "layout": {
+    "header": {
+      "variant": "letterhead"
+    },
+    "customer": {
+      "variant": "zatca-details"
+    },
+    "table": {
+      "variant": "grid"
+    },
+    "totals": {
+      "variant": "statement"
+    },
+    "qr": {
+      "variant": "zatca"
+    },
+    "footer": {
+      "variant": "address"
+    }
+  },
+  "columns": [
+    {
+      "key": "index",
+      "label": "#",
+      "align": "center",
+      "width": "3%"
+    },
+    {
+      "key": "code",
+      "labelKey": "codeSku",
+      "label": "الرمز",
+      "align": "center",
+      "width": "8%"
+    },
+    {
+      "key": "description",
+      "labelKey": "natureOfGoods",
+      "label": "البيان",
+      "align": "right",
+      "width": "21%"
+    },
+    {
+      "key": "qty",
+      "label": "الكمية",
+      "align": "center",
+      "width": "8%"
+    },
+    {
+      "key": "unit",
+      "label": "الوحدة",
+      "align": "center",
+      "width": "5%"
+    },
+    {
+      "key": "unitPrice",
+      "label": "سعر الوحدة",
+      "align": "center",
+      "width": "9%"
+    },
+    {
+      "key": "discount",
+      "label": "الخصم",
+      "align": "center",
+      "width": "7%"
+    },
+    {
+      "key": "subtotalExcl",
+      "label": "الإجمالي قبل الضريبة",
+      "align": "center",
+      "width": "10%"
+    },
+    {
+      "key": "taxRate",
+      "label": "نسبة الضريبة",
+      "align": "center",
+      "width": "7%"
+    },
+    {
+      "key": "taxAmount",
+      "label": "مبلغ الضريبة",
+      "align": "center",
+      "width": "8%"
+    },
+    {
+      "key": "subtotalIncl",
+      "label": "الإجمالي شامل الضريبة",
+      "align": "center",
+      "width": "12%"
+    }
+  ]
+}
