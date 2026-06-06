@@ -30,17 +30,17 @@ const cols = {
 // ZATCA official detailed templates (the only templates shipped). Add more ZATCA color
 // variants here as needed.
 const T = [
-  { id: 'zatca', name: 'زاتكا الرسمي', en: 'ZATCA Standard', cat: 'Government', cols: 'zatca',
+  { id: 'zatca', name: 'فاتورة اليمامة', en: 'Al Yamama Invoice', cat: 'Government', cols: 'zatca',
     theme: { primary: '#1c3c7a', accent: '#2a4e92', line: '#cdd7ea', text: '#13213f', muted: '#5a6b86' },
     fonts: { base: 'Tajawal', heading: 'Tajawal' },
     L: { header: 'letterhead', customer: 'zatca-details', table: 'grid', totals: 'statement', qr: 'zatca', footer: 'address' },
     tags: ['government', 'zatca', 'official', 'detailed', 'رسمي', 'زاتكا'] },
-  { id: 'zatca-green', name: 'زاتكا أخضر', en: 'ZATCA Green', cat: 'Government', cols: 'zatca',
+  { id: 'zatca-green', name: 'فاتورة اليمامة - أخضر', en: 'Al Yamama Invoice - Green', cat: 'Government', cols: 'zatca',
     theme: { primary: '#0f5132', accent: '#198754', line: '#cfe3d6', text: '#10261b', muted: '#5a7065' },
     fonts: { base: 'Tajawal', heading: 'Tajawal' },
     L: { header: 'letterhead', customer: 'zatca-details', table: 'grid', totals: 'statement', qr: 'zatca', footer: 'address' },
     tags: ['government', 'zatca', 'official', 'detailed', 'green', 'رسمي', 'زاتكا'] },
-  { id: 'zatca-gray', name: 'زاتكا رمادي', en: 'ZATCA Gray', cat: 'Government', cols: 'zatca',
+  { id: 'zatca-gray', name: 'فاتورة اليمامة - رمادي', en: 'Al Yamama Invoice - Gray', cat: 'Government', cols: 'zatca',
     theme: { primary: '#374151', accent: '#4b5563', line: '#dde1e7', text: '#1f2937', muted: '#6b7280' },
     fonts: { base: 'IBM Plex Sans Arabic', heading: 'IBM Plex Sans Arabic' },
     L: { header: 'letterhead', customer: 'zatca-details', table: 'grid', totals: 'statement', qr: 'zatca', footer: 'address' },
