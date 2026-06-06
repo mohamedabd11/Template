@@ -50,6 +50,5 @@ export const CDN = Object.freeze({
 });
 
 export const TEMPLATE_CATEGORIES = [
-  'Government', 'Corporate', 'Modern', 'Executive', 'Construction',
-  'Transport', 'Travel Agency', 'Retail',
+  'Government',
 ];

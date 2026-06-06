@@ -19,20 +19,21 @@ import { tafqeet, tafqeetEn } from '../utils/tafqeet.js';
 export async function PreviewPage(params = {}) {
   const el = h('div', { class: 'max-w-6xl mx-auto px-4 py-6' });
 
-  const templateId = params.id || store.get('selectedTemplateId') || 'corporate-blue';
+  const templateId = params.id || store.get('selectedTemplateId') || 'zatca';
   const invoice = store.get('currentInvoice') || await getSampleInvoice();
   const usingSample = !store.get('currentInvoice');
 
   let template;
   try { template = await TemplateService.get(templateId); }
-  catch { template = await TemplateService.get('corporate-blue'); }
+  catch { template = await TemplateService.get('zatca'); }
 
   // Draw the QR image from its (preserved) content if we only have content so far.
   await QrService.ensureImage(invoice);
 
   const stage = h('div', { class: 'preview-stage' });
   let view = 'a4';
-  let node = null;
+  let node = null;        // invoice page (page 1)
+  let bankNode = null;    // bank/payment details page (page 2), when present
   let editing = false;
 
   // Live-recalc totals on any edit while in edit mode. (For a contenteditable root the input
@@ -48,21 +49,26 @@ export async function PreviewPage(params = {}) {
   function render() {
     clear(stage);
     node = TemplateEngine.render(invoice, template);
-    const wrap = h('div', { class: `preview-frame view-${view}` }, node);
-    stage.appendChild(wrap);
+    stage.appendChild(h('div', { class: `preview-frame view-${view}` }, node));
+    // Bank/payment details render as a SEPARATE page (page 2) when the user has added them.
+    bankNode = TemplateEngine.renderBankPage(invoice, template);
+    if (bankNode) stage.appendChild(h('div', { class: `preview-frame view-${view}`, style: { marginTop: '16px' } }, bankNode));
     applyEditing();
   }
+
+  /** All rendered pages (invoice + optional bank page), for export/print. */
+  function pages() { return [node, bankNode].filter(Boolean); }
 
   // Inline WYSIWYG editing: make every text on the invoice editable before print/export.
   // Edits live in the rendered DOM, which is exactly what print()/toPdf() capture.
   function applyEditing() {
-    if (!node) return;
-    node.setAttribute('contenteditable', editing ? 'true' : 'false');
-    node.classList.toggle('is-editing', editing);
-    node.spellcheck = false;
-    node.querySelectorAll('img').forEach((im) => { im.setAttribute('contenteditable', 'false'); im.draggable = false; });
-    // computed cells (line subtotals, totals, tax rate) are never directly editable
-    node.querySelectorAll('[data-ro]').forEach((el) => el.setAttribute('contenteditable', 'false'));
+    pages().forEach((p) => {
+      p.setAttribute('contenteditable', editing ? 'true' : 'false');
+      p.classList.toggle('is-editing', editing);
+      p.spellcheck = false;
+      p.querySelectorAll('img').forEach((im) => { im.setAttribute('contenteditable', 'false'); im.draggable = false; });
+      p.querySelectorAll('[data-ro]').forEach((el) => el.setAttribute('contenteditable', 'false'));
+    });
   }
 
   // Parse a displayed number (handles Arabic-Indic digits, commas, %, currency text).
@@ -142,6 +148,39 @@ export async function PreviewPage(params = {}) {
     });
   }
 
+  // Add/edit bank payment details — these render on a SEPARATE page (page 2). Empty = no page.
+  function openBankDialog() {
+    const co = invoice.company;
+    const field = (label, key) => h('label', { class: 'block' },
+      h('span', { class: 'block text-xs font-semibold text-slate-500 mb-1' }, label),
+      h('input', { name: key, value: co[key] || '', class: 'w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-200 outline-none' }));
+    const body = h('div', { class: 'space-y-3' },
+      h('p', { class: 'text-sm text-slate-500' }, 'أضف تفاصيل الدفع البنكية — ستظهر في صفحة منفصلة (صفحة 2) عند التصدير/الطباعة. اتركها فارغة لإلغاء الصفحة.'),
+      h('div', { class: 'grid grid-cols-1 sm:grid-cols-2 gap-3' },
+        field('اسم المستفيد', 'payeeName'),
+        field('رقم الحساب', 'accountNumber'),
+        field('المصرف', 'bankName'),
+        field('الفرع', 'bankBranch'),
+        field('رقم الآيبان (IBAN)', 'iban'),
+        field('رقم السويفت (SWIFT)', 'swift'),
+      ),
+    );
+    const m = Modal({
+      title: '🏦 تفاصيل الدفع البنكية', size: 'lg', body,
+      actions: [
+        h('button', { class: 'btn-primary', onClick: () => {
+          ['payeeName', 'accountNumber', 'bankName', 'bankBranch', 'iban', 'swift']
+            .forEach((k) => { co[k] = body.querySelector(`[name="${k}"]`).value.trim(); });
+          if (!usingSample) store.set('currentInvoice', invoice);
+          render();
+          toast(TemplateEngine.hasBankPage(invoice) ? 'تمت إضافة صفحة تفاصيل الدفع' : 'تم حذف تفاصيل الدفع', 'success');
+          m.close();
+        } }, 'حفظ'),
+        h('button', { class: 'btn-secondary', onClick: () => m.close() }, 'إلغاء'),
+      ],
+    });
+  }
+
   el.append(
     h('div', { class: 'flex flex-wrap items-center justify-between gap-3 mb-4' },
       h('div', {},
@@ -159,9 +198,10 @@ export async function PreviewPage(params = {}) {
           if (editing) toast('وضع التعديل مفعّل — انقر أي نص على الفاتورة لتعديله', 'info');
         } }, '✏️ تعديل'),
         h('button', { class: 'btn-secondary', onClick: openQrDialog }, '🔎 محتوى QR'),
-        h('button', { class: 'btn-secondary', onClick: () => ExportService.print(node) }, '🖨️ طباعة'),
+        h('button', { class: 'btn-secondary', onClick: openBankDialog }, '🏦 تفاصيل البنك'),
+        h('button', { class: 'btn-secondary', onClick: () => ExportService.print(pages()) }, '🖨️ طباعة'),
         h('button', { class: 'btn-primary', onClick: async () => {
-          toast('جارٍ إنشاء PDF…'); try { await ExportService.toPdf(node, `${invoice.invoiceNumber || 'invoice'}.pdf`); toast('تم تنزيل PDF', 'success'); }
+          toast('جارٍ إنشاء PDF…'); try { await ExportService.toPdf(pages(), `${invoice.invoiceNumber || 'invoice'}.pdf`); toast('تم تنزيل PDF', 'success'); }
           catch (e) { toast('تعذر التصدير: ' + e.message, 'error'); }
         } }, '⬇️ تنزيل PDF'),
       ),

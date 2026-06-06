@@ -343,3 +343,8 @@
 .tpl-zatca-green .tot--statement .st-en, .tpl-zatca-green .tot--statement .st-val, .tpl-zatca-green .tot--statement .st-ar,
 .tpl-zatca-gray .tot--statement .st-en, .tpl-zatca-gray .tot--statement .st-val, .tpl-zatca-gray .tot--statement .st-ar { padding-top: 2.5px; padding-bottom: 2.5px; }
 .tpl-zatca .ft--address, .tpl-zatca-green .ft--address, .tpl-zatca-gray .ft--address { padding-top: 3mm; padding-bottom: 3mm; }
+
+/* Separate bank/payment details page */
+.bank-page .inv-body { display: block; }
+.bank-page-title { text-align: center; color: var(--c-primary); font-weight: 800; font-size: 13pt; padding: 8mm 0 4mm; }
+.bank-page .ft-bank { margin-top: 0; }

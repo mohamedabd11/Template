@@ -8,6 +8,32 @@ function notes(c) {
   return c.invoice.notes ? `<div class="ft-notes">${esc(c.invoice.notes)}</div>` : '';
 }
 
+/** True if the invoice has any bank/payment field filled. */
+export function hasBankDetails(invoice) {
+  const co = invoice.company || {};
+  return [co.payeeName, co.accountNumber, co.bankName, co.bankBranch, co.iban, co.swift]
+    .some((v) => v && String(v).trim());
+}
+
+/** Bank/payment details table (rendered on its own page). */
+export function buildBankTable(c) {
+  const co = c.invoice.company;
+  const dash = (v) => (v == null || v === '' ? '—' : esc(v));
+  const cell = (key, val) => `<div class="zd-cell"><span class="zd-lbl">${bl(key)}</span><span class="zd-val">${dash(val)}</span></div>`;
+  return `
+    <div class="zd ft-bank">
+      <div class="zd-head"><span>${T.paymentDetails[0]}</span><span>${T.paymentDetails[1]}</span></div>
+      <div class="zd-grid"><div class="zd-cell zd-cell--wide"><span class="zd-lbl">${bl('payeeName')}</span><span class="zd-val">${dash(co.payeeName)}</span></div></div>
+      <div class="zd-grid zd-grid--bank">
+        ${cell('accountNumber', co.accountNumber)}
+        ${cell('bank', co.bankName)}
+        ${cell('branch', co.bankBranch)}
+        ${cell('iban', co.iban)}
+        ${cell('swift', co.swift)}
+      </div>
+    </div>`;
+}
+
 function contact(c) {
   const co = c.invoice.company;
   return [co.phone, co.email, co.address].filter(Boolean).map(esc).join(' · ');
@@ -52,7 +78,8 @@ export const footerBlocks = {
       <div class="ft-bp-row"><span>${esc(c.invoice.company.name || '')}</span><span>${contact(c)}</span></div>
     </div>`,
 
-  // ZATCA address footer: computer-generated note + company address & contact line + bank details.
+  // ZATCA address footer: computer-generated note + company address & contact line.
+  // (Bank/payment details live on a separate page — see buildBankTable / TemplateEngine.renderBankPage.)
   address: (c) => {
     const co = c.invoice.company;
     const contactBits = [
@@ -60,30 +87,12 @@ export const footerBlocks = {
       co.email && `E-mail: ${co.email}`,
       co.website && `Website: ${co.website}`,
     ].filter(Boolean).map(esc).join(' &nbsp;-&nbsp; ');
-    // Bank/payment details — shown ONLY if the user filled at least one field; hidden otherwise.
-    const hasBank = [co.payeeName, co.accountNumber, co.bankName, co.bankBranch, co.iban, co.swift]
-      .some((v) => v && String(v).trim());
-    const dash = (v) => (v == null || v === '' ? '—' : esc(v));
-    const bankCell = (key, val) => `<div class="zd-cell"><span class="zd-lbl">${bl(key)}</span><span class="zd-val">${dash(val)}</span></div>`;
-    const bank = hasBank ? `
-      <div class="zd ft-bank">
-        <div class="zd-head"><span>${T.paymentDetails[0]}</span><span>${T.paymentDetails[1]}</span></div>
-        <div class="zd-grid"><div class="zd-cell zd-cell--wide"><span class="zd-lbl">${bl('payeeName')}</span><span class="zd-val">${dash(co.payeeName)}</span></div></div>
-        <div class="zd-grid zd-grid--bank">
-          ${bankCell('accountNumber', co.accountNumber)}
-          ${bankCell('bank', co.bankName)}
-          ${bankCell('branch', co.bankBranch)}
-          ${bankCell('iban', co.iban)}
-          ${bankCell('swift', co.swift)}
-        </div>
-      </div>` : '';
     return `
       <div class="ft ft--address">
         <div class="ft-cg">${T.computerGenerated[1]} — ${T.computerGenerated[0]}</div>
         <div class="ft-addr-rule"></div>
         ${co.address ? `<div class="ft-addr">${esc(co.address)}</div>` : ''}
         ${contactBits ? `<div class="ft-contact2">${contactBits}</div>` : ''}
-        ${bank}
       </div>`;
   },
 

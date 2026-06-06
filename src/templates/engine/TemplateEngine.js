@@ -14,7 +14,9 @@ import { customerBlocks } from './blocks/customer.js';
 import { tableBlocks } from './blocks/table.js';
 import { totalsBlocks } from './blocks/totals.js';
 import { qrBlocks } from './blocks/qr.js';
-import { footerBlocks } from './blocks/footer.js';
+import { footerBlocks, buildBankTable, hasBankDetails } from './blocks/footer.js';
+import { headerBlocks as headers } from './blocks/header.js';
+import { T } from './labels.js';
 import { money, num, date, toArabicDigits } from '../../utils/format.js';
 import { tafqeet, tafqeetEn } from '../../utils/tafqeet.js';
 import { esc } from '../../utils/dom.js';
@@ -45,6 +47,23 @@ function pick(region, variant) {
   return set[variant] || set[Object.keys(set)[0]];
 }
 
+/** Create an empty A4 page element with the template's theme CSS variables applied. */
+function newPage(template, ctx, extraClass = '') {
+  const page = document.createElement('div');
+  page.className = `invoice-page tpl-${template.id}${extraClass ? ` ${extraClass}` : ''}`;
+  page.setAttribute('dir', 'rtl');
+  page.lang = 'ar';
+  page.style.setProperty('--c-primary', ctx.theme.primary || '#1e3a8a');
+  page.style.setProperty('--c-accent', ctx.theme.accent || ctx.theme.primary || '#3b82f6');
+  page.style.setProperty('--c-text', ctx.theme.text || '#0f172a');
+  page.style.setProperty('--c-muted', ctx.theme.muted || '#64748b');
+  page.style.setProperty('--c-bg', ctx.theme.bg || '#ffffff');
+  page.style.setProperty('--c-line', ctx.theme.line || '#e2e8f0');
+  page.style.setProperty('--font-base', ctx.fonts.base || 'Tajawal');
+  page.style.setProperty('--font-heading', ctx.fonts.heading || 'Cairo');
+  return page;
+}
+
 function buildContext(invoice, template) {
   const theme = template.theme || {};
   return {
@@ -68,18 +87,7 @@ export const TemplateEngine = {
     const ctx = buildContext(invoice, template);
     const L = template.layout || {};
 
-    const page = document.createElement('div');
-    page.className = `invoice-page tpl-${template.id}`;
-    page.setAttribute('dir', 'rtl');
-    page.lang = 'ar';
-    page.style.setProperty('--c-primary', ctx.theme.primary || '#1e3a8a');
-    page.style.setProperty('--c-accent', ctx.theme.accent || ctx.theme.primary || '#3b82f6');
-    page.style.setProperty('--c-text', ctx.theme.text || '#0f172a');
-    page.style.setProperty('--c-muted', ctx.theme.muted || '#64748b');
-    page.style.setProperty('--c-bg', ctx.theme.bg || '#ffffff');
-    page.style.setProperty('--c-line', ctx.theme.line || '#e2e8f0');
-    page.style.setProperty('--font-base', ctx.fonts.base || 'Tajawal');
-    page.style.setProperty('--font-heading', ctx.fonts.heading || 'Cairo');
+    const page = newPage(template, ctx);
 
     const header = pick('header', L.header?.variant)(ctx);
     const customer = pick('customer', L.customer?.variant)(ctx);
@@ -98,6 +106,31 @@ export const TemplateEngine = {
         <div class="inv-totals">${totals}</div>
       </div>
       <div class="inv-footer">${footer}</div>
+    `;
+    return page;
+  },
+
+  /** Whether a separate bank-details page should be produced for this invoice. */
+  hasBankPage(invoice) { return hasBankDetails(invoice); },
+
+  /**
+   * Render the bank/payment details as its OWN A4 page (page 2 of the PDF). Carries the same
+   * letterhead so it's clearly tied to the invoice.
+   * @returns {HTMLElement|null}
+   */
+  renderBankPage(invoice, template) {
+    if (!hasBankDetails(invoice)) return null;
+    ensureCss(template);
+    const ctx = buildContext(invoice, template);
+    const page = newPage(template, ctx, 'bank-page');
+    const header = (headers.letterhead || pick('header', 'letterhead'))(ctx);
+    page.innerHTML = `
+      <div class="inv-header">${header}</div>
+      <div class="inv-body">
+        <div class="bank-page-title">${T.paymentDetails[0]} · ${T.paymentDetails[1]}</div>
+        ${buildBankTable(ctx)}
+      </div>
+      <div class="inv-footer">${(footerBlocks.address)(ctx)}</div>
     `;
     return page;
   },

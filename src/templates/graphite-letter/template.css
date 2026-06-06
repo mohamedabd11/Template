@@ -1,6 +1,0 @@
-/* Graphite Letterhead — scoped identity */
-.tpl-graphite-letter{}
-.tpl-graphite-letter{font-size:10.5pt;}
-.tpl-graphite-letter .inv-header{border-top:4px solid var(--c-primary);padding-top:6mm;}
-.tpl-graphite-letter .hd--minimal .hd-min-row{border-bottom-width:2px;}
-.tpl-graphite-letter .tbl--minimal thead th .bl-en{letter-spacing:.06em;}

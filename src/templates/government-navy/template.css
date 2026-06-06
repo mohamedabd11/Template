@@ -1,6 +1,0 @@
-/* Government Navy — scoped identity */
-.tpl-government-navy{}
-.tpl-government-navy .hd--split .hd-divider{width:2px;}
-.tpl-government-navy .hd-side--title{border-bottom:3px double var(--c-primary);padding-bottom:6px;}
-.tpl-government-navy .tbl--grid thead th{background:var(--c-primary);color:#fff;border-color:var(--c-primary);}
-.tpl-government-navy .tot--ledger .tot-ledger-grand td{border-color:var(--c-primary);}

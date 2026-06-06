@@ -22,7 +22,7 @@ const VLABEL = { header: 'الترويسة', customer: 'بيانات العمي�
 
 export async function DesignerPage(params = {}) {
   const el = h('div', { class: 'max-w-7xl mx-auto px-4 py-6' });
-  const base = await TemplateService.get(params.id || 'corporate-blue');
+  const base = await TemplateService.get(params.id || 'zatca');
   const sample = await getSampleInvoice();
 
   // Work on a draft copy so the built-in template stays untouched.
