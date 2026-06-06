@@ -270,11 +270,12 @@
 .zd-cell { background: #fff; display: flex; align-items: stretch; font-size: 8.5pt; min-height: 22px; }
 .zd-cell--wide { grid-column: 1 / -1; }
 .zd-lbl { background: color-mix(in srgb, var(--c-primary) 7%, #fff); color: var(--c-primary); padding: 3px 7px; min-width: 96px; font-weight: 700; display: flex; align-items: center; }
-/* Dates row: compact label-on-top, value-below cells (avoids tall per-char wrapping). */
+/* Dates row: compact label-on-top, value-below cells. Fixed label height keeps the divider
+   line aligned across all cells regardless of how many lines each label takes. */
 .zd-grid--dates .zd-cell { flex-direction: column; align-items: stretch; }
-.zd-grid--dates .zd-lbl { min-width: 0; width: 100%; border-inline-end: 0; border-bottom: 1px solid var(--c-line); padding: 2px 5px; font-size: 7.3pt; line-height: 1.25; }
+.zd-grid--dates .zd-lbl { min-width: 0; width: 100%; height: 34px; border-inline-end: 0; border-bottom: 1px solid var(--c-line); padding: 2px 5px; font-size: 6.9pt; line-height: 1.12; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
 .zd-grid--dates .zd-lbl .bl-en { display: block; margin: 0; }
-.zd-grid--dates .zd-val { width: 100%; padding: 3px 5px; font-size: 8pt; }
+.zd-grid--dates .zd-val { width: 100%; padding: 4px 5px; font-size: 8pt; flex: 1; display: flex; align-items: center; }
 .zd-val { padding: 3px 7px; flex: 1; display: flex; align-items: center; word-break: break-word; }
 
 /* Wide items table for the detailed layout */
