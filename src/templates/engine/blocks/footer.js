@@ -67,7 +67,7 @@ export const footerBlocks = {
     const bankCell = (key, val) => `<div class="zd-cell"><span class="zd-lbl">${bl(key)}</span><span class="zd-val">${dash(val)}</span></div>`;
     const bank = hasBank ? `
       <div class="zd ft-bank">
-        <div class="zd-head"><span>${T.paymentDetails[1]}</span><span>${T.paymentDetails[0]}</span></div>
+        <div class="zd-head"><span>${T.paymentDetails[0]}</span><span>${T.paymentDetails[1]}</span></div>
         <div class="zd-grid"><div class="zd-cell zd-cell--wide"><span class="zd-lbl">${bl('payeeName')}</span><span class="zd-val">${dash(co.payeeName)}</span></div></div>
         <div class="zd-grid zd-grid--bank">
           ${bankCell('accountNumber', co.accountNumber)}

@@ -13,7 +13,7 @@ function zCell(labelHtml, value, cls = '') {
 function detailsBlock(labelPair, p) {
   return `
     <div class="zd">
-      <div class="zd-head"><span>${labelPair[1]}</span><span>${labelPair[0]}</span></div>
+      <div class="zd-head"><span>${labelPair[0]}</span><span>${labelPair[1]}</span></div>
       <div class="zd-grid">
         ${zCell(bl('fldName'), p.name, 'zd-cell--wide')}
         ${zCell(bl('fldStreet'), p.street)}

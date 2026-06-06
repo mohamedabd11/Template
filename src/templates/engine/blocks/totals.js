@@ -87,9 +87,9 @@ export const totalsBlocks = {
     return `
       <div class="tot tot--statement">
         ${rows.map(([lbl, val, key, cls]) => `<div class="st-row ${cls || ''}">
-          <span class="st-en">${lbl[1]} (SAR)</span>
+          <span class="st-ar">${lbl[0]} (ر.س)</span>
           <span class="st-val" data-total="${key}" data-money="plain">${c.money(val, false)}</span>
-          <span class="st-ar">${lbl[0]} (ر.س)</span></div>`).join('')}
+          <span class="st-en">${lbl[1]} (SAR)</span></div>`).join('')}
         <div class="st-words"><span>Amount in words:</span> <span data-total-words="en">${esc(c.tafqeetEn(inv.grandTotal))}</span></div>
         <div class="st-words st-words--ar"><span>${T.amountInWords[0]}:</span> <span data-total-words="ar">${esc(c.tafqeet(inv.grandTotal))}</span></div>
       </div>`;
