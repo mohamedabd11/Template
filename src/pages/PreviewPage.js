@@ -31,12 +31,25 @@ export async function PreviewPage(params = {}) {
   const stage = h('div', { class: 'preview-stage' });
   let view = 'a4';
   let node = null;
+  let editing = false;
 
   function render() {
     clear(stage);
     node = TemplateEngine.render(invoice, template);
     const wrap = h('div', { class: `preview-frame view-${view}` }, node);
     stage.appendChild(wrap);
+    applyEditing();
+  }
+
+  // Inline WYSIWYG editing: make every text on the invoice editable before print/export.
+  // Edits live in the rendered DOM, which is exactly what print()/toPdf() capture.
+  function applyEditing() {
+    if (!node) return;
+    node.setAttribute('contenteditable', editing ? 'true' : 'false');
+    node.classList.toggle('is-editing', editing);
+    node.spellcheck = false;
+    // keep images/QR/logo non-editable so layout isn't broken
+    node.querySelectorAll('img').forEach((im) => { im.setAttribute('contenteditable', 'false'); im.draggable = false; });
   }
 
   const viewBtn = (label, v) => h('button', { class: 'tab-btn', dataset: { v }, onClick: () => { view = v; sync(); render(); } }, label);
@@ -83,6 +96,12 @@ export async function PreviewPage(params = {}) {
         viewBar,
         h('button', { class: 'btn-secondary', onClick: () => location.hash = '#/gallery' }, 'تغيير القالب'),
         h('button', { class: 'btn-secondary', onClick: openLogoDialog }, '🖼️ الشعار'),
+        h('button', { class: 'btn-secondary', dataset: { role: 'edit' }, onClick: (e) => {
+          editing = !editing; applyEditing();
+          e.currentTarget.classList.toggle('is-active', editing);
+          e.currentTarget.textContent = editing ? '🔒 إنهاء التعديل' : '✏️ تعديل';
+          if (editing) toast('وضع التعديل مفعّل — انقر أي نص على الفاتورة لتعديله', 'info');
+        } }, '✏️ تعديل'),
         h('button', { class: 'btn-secondary', onClick: openQrDialog }, '🔎 محتوى QR'),
         h('button', { class: 'btn-secondary', onClick: () => ExportService.print(node) }, '🖨️ طباعة'),
         h('button', { class: 'btn-primary', onClick: async () => {
