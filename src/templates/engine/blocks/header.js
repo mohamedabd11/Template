@@ -133,7 +133,7 @@ export const headerBlocks = {
     return `
     <div class="hd hd--letterhead">
       ${brand}
-      <div class="lh-title">${T.taxInvoice[1]} &nbsp; · &nbsp; ${T.taxInvoice[0]}</div>
+      <div class="lh-title">${T.taxInvoice[0]} &nbsp; · &nbsp; ${T.taxInvoice[1]}</div>
       <div class="lh-invno">
         <span><b>${esc(inv.invoiceNumber || '')}</b> ${T.invoiceNo[0]}</span>
         <span>Invoice No: <b>${esc(inv.invoiceNumber || '')}</b></span>
