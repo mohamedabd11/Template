@@ -181,6 +181,63 @@ export async function PreviewPage(params = {}) {
     });
   }
 
+  // Letterhead ("ورق مروّس"): issue the invoice on the company's official paper.
+  function openLetterheadDialog() {
+    const lh = invoice.letterhead;
+    const previewImg = h('img', { class: 'h-28 w-auto max-w-[200px] object-contain border border-slate-200 rounded bg-white', src: lh.imageDataUrl || '', style: { display: lh.imageDataUrl ? 'block' : 'none' } });
+    const fileInput = h('input', { type: 'file', accept: 'image/png,image/jpeg', class: 'hidden', onChange: (e) => {
+      const f = e.target.files[0]; if (!f) return; const r = new FileReader();
+      r.onload = () => { lh.imageDataUrl = r.result; previewImg.src = r.result; previewImg.style.display = 'block'; }; r.readAsDataURL(f); e.target.value = '';
+    } });
+    const enabled = h('input', { type: 'checkbox', checked: lh.enabled, class: 'w-4 h-4' });
+    const hideHF = h('input', { type: 'checkbox', checked: lh.hideHeaderFooter, class: 'w-4 h-4' });
+    const modeEmbed = h('input', { type: 'radio', name: 'lhmode', checked: lh.showBackground, class: 'w-4 h-4' });
+    const modePre = h('input', { type: 'radio', name: 'lhmode', checked: !lh.showBackground, class: 'w-4 h-4' });
+    const mInput = (v) => h('input', { type: 'number', value: v, min: '0', max: '100', class: 'w-20 border border-slate-200 rounded-lg px-2 py-1 text-sm' });
+    const mTop = mInput(lh.margins.top), mBottom = mInput(lh.margins.bottom), mSide = mInput(lh.margins.side);
+    const cbRow = (input, label, hint) => h('label', { class: 'flex items-start gap-2 cursor-pointer' }, input,
+      h('span', {}, h('span', { class: 'text-sm font-medium text-slate-700' }, label), hint ? h('span', { class: 'block text-xs text-slate-400' }, hint) : null));
+
+    const body = h('div', { class: 'space-y-4' },
+      cbRow(enabled, 'تفعيل الورق المروّس', 'إصدار الفاتورة وصفحة البنك على ورق المؤسسة الرسمي'),
+      h('div', { class: 'flex items-center gap-3' },
+        previewImg,
+        h('button', { class: 'btn-secondary', onClick: () => fileInput.click() }, lh.imageDataUrl ? 'تغيير صورة الترويسة' : 'رفع صورة الترويسة (A4)'), fileInput,
+      ),
+      h('div', { class: 'border-t border-slate-100 pt-3 space-y-2' },
+        h('div', { class: 'text-sm font-bold text-slate-700' }, 'طريقة الإخراج'),
+        cbRow(modeEmbed, 'ترويسة رقمية مدمجة', 'تظهر صورة الترويسة داخل PDF (للإرسال أو الطباعة على ورق أبيض)'),
+        cbRow(modePre, 'ورق مطبوع مسبقاً', 'الطباعة على ورقك المروّس الفعلي — هوامش فقط بلا خلفية'),
+      ),
+      cbRow(hideHF, 'إخفاء رأس/تذييل الفاتورة', 'موصى به — لتجنّب تكرار الشعار والعنوان الموجودين على الورق'),
+      h('div', { class: 'border-t border-slate-100 pt-3' },
+        h('div', { class: 'text-sm font-bold text-slate-700 mb-2' }, 'الهوامش الآمنة (مم)'),
+        h('div', { class: 'flex flex-wrap gap-4' },
+          h('label', { class: 'flex items-center gap-2 text-sm' }, 'أعلى', mTop),
+          h('label', { class: 'flex items-center gap-2 text-sm' }, 'أسفل', mBottom),
+          h('label', { class: 'flex items-center gap-2 text-sm' }, 'الجانبان', mSide),
+        ),
+      ),
+    );
+    const m = Modal({
+      title: '🧾 ورق مروّس (ترويسة المؤسسة)', size: 'lg', body,
+      actions: [
+        h('button', { class: 'btn-primary', onClick: () => {
+          lh.enabled = enabled.checked;
+          lh.showBackground = modeEmbed.checked;
+          lh.hideHeaderFooter = hideHF.checked;
+          lh.margins = { top: +mTop.value || 0, bottom: +mBottom.value || 0, side: +mSide.value || 0 };
+          if (lh.enabled && lh.showBackground && !lh.imageDataUrl) { toast('ارفع صورة الترويسة أولاً، أو اختر «ورق مطبوع مسبقاً»', 'warn'); return; }
+          if (!usingSample) store.set('currentInvoice', invoice);
+          render();
+          toast(lh.enabled ? 'تم تفعيل الورق المروّس' : 'تم إلغاء الورق المروّس', 'success');
+          m.close();
+        } }, 'حفظ'),
+        h('button', { class: 'btn-secondary', onClick: () => m.close() }, 'إلغاء'),
+      ],
+    });
+  }
+
   el.append(
     h('div', { class: 'flex flex-wrap items-center justify-between gap-3 mb-4' },
       h('div', {},
@@ -199,6 +256,7 @@ export async function PreviewPage(params = {}) {
         } }, '✏️ تعديل'),
         h('button', { class: 'btn-secondary', onClick: openQrDialog }, '🔎 محتوى QR'),
         h('button', { class: 'btn-secondary', onClick: openBankDialog }, '🏦 تفاصيل البنك'),
+        h('button', { class: 'btn-secondary', onClick: openLetterheadDialog }, '🧾 ورق مروّس'),
         h('button', { class: 'btn-secondary', onClick: () => ExportService.print(pages()) }, '🖨️ طباعة'),
         h('button', { class: 'btn-primary', onClick: async () => {
           toast('جارٍ إنشاء PDF…'); try { await ExportService.toPdf(pages(), `${invoice.invoiceNumber || 'invoice'}.pdf`); toast('تم تنزيل PDF', 'success'); }

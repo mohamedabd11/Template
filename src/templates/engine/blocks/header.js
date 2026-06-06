@@ -118,8 +118,9 @@ export const headerBlocks = {
   // "TAX INVOICE" title bar and the invoice-number row.
   letterhead: (c) => {
     const co = c.invoice.company; const inv = c.invoice;
-    return `
-    <div class="hd hd--letterhead">
+    // On official letterhead paper, the company brand is already printed → omit it.
+    const hideBrand = c.letterhead?.enabled && c.letterhead.hideHeaderFooter;
+    const brand = hideBrand ? '' : `
       <div class="lh-top">
         <div class="lh-logo">${logo(c)}</div>
         <div class="lh-names">
@@ -128,7 +129,10 @@ export const headerBlocks = {
           ${co.crNumber ? `<div class="lh-cr">C.R. ${esc(co.crNumber)} &nbsp;·&nbsp; س.ت ${esc(co.crNumber)}</div>` : ''}
         </div>
         <div class="lh-logo lh-logo--spacer"></div>
-      </div>
+      </div>`;
+    return `
+    <div class="hd hd--letterhead">
+      ${brand}
       <div class="lh-title">${T.taxInvoice[1]} &nbsp; · &nbsp; ${T.taxInvoice[0]}</div>
       <div class="lh-invno">
         <span><b>${esc(inv.invoiceNumber || '')}</b> ${T.invoiceNo[0]}</span>

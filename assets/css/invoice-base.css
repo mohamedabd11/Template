@@ -348,3 +348,6 @@
 .bank-page .inv-body { display: block; }
 .bank-page-title { text-align: center; color: var(--c-primary); font-weight: 800; font-size: 13pt; padding: 8mm 0 4mm; }
 .bank-page .ft-bank { margin-top: 0; }
+
+/* Letterhead ("ورق مروّس") — print the background image and reserve safe-area margins. */
+.invoice-page.has-letterhead { -webkit-print-color-adjust: exact; print-color-adjust: exact; }

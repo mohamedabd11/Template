@@ -82,11 +82,16 @@ export const footerBlocks = {
   // (Bank/payment details live on a separate page — see buildBankTable / TemplateEngine.renderBankPage.)
   address: (c) => {
     const co = c.invoice.company;
+    // On official letterhead paper, the address/contact are already printed → keep only the note.
+    const hideAddr = c.letterhead?.enabled && c.letterhead.hideHeaderFooter;
     const contactBits = [
       co.phone && `Tel: ${co.phone}`,
       co.email && `E-mail: ${co.email}`,
       co.website && `Website: ${co.website}`,
     ].filter(Boolean).map(esc).join(' &nbsp;-&nbsp; ');
+    if (hideAddr) {
+      return `<div class="ft ft--address"><div class="ft-cg">${T.computerGenerated[1]} — ${T.computerGenerated[0]}</div></div>`;
+    }
     return `
       <div class="ft ft--address">
         <div class="ft-cg">${T.computerGenerated[1]} — ${T.computerGenerated[0]}</div>

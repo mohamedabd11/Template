@@ -36,6 +36,16 @@ export class Invoice {
     // If the source provided explicit totals, keep them to reproduce the document exactly.
     this.originalTotals = data.originalTotals || null; // { subtotal, tax, discount, total }
 
+    // Letterhead ("ورق مروّس") settings — issue the invoice on the company's official paper.
+    this.letterhead = {
+      enabled: false,
+      imageDataUrl: '',     // A4 letterhead image (digital embed)
+      showBackground: true, // true = embed image in PDF; false = pre-printed paper (margins only)
+      hideHeaderFooter: true,
+      margins: { top: 38, bottom: 26, side: 16 }, // mm safe area
+      ...(data.letterhead || {}),
+    };
+
     this.createdAt = data.createdAt || new Date().toISOString();
     this.source = data.source || 'manual'; // manual | json | pdf | image
   }
@@ -78,7 +88,8 @@ export class Invoice {
       company: this.company.toJSON(), customer: this.customer.toJSON(),
       items: this.items.map((i) => i.toJSON()),
       qrContent: this.qrContent, qrImageDataUrl: this.qrImageDataUrl,
-      originalTotals: this.originalTotals, createdAt: this.createdAt, source: this.source,
+      originalTotals: this.originalTotals, letterhead: this.letterhead,
+      createdAt: this.createdAt, source: this.source,
     };
   }
 

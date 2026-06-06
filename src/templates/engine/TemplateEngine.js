@@ -61,7 +61,25 @@ function newPage(template, ctx, extraClass = '') {
   page.style.setProperty('--c-line', ctx.theme.line || '#e2e8f0');
   page.style.setProperty('--font-base', ctx.fonts.base || 'Tajawal');
   page.style.setProperty('--font-heading', ctx.fonts.heading || 'Cairo');
+  applyLetterhead(page, ctx.letterhead);
   return page;
+}
+
+/** Apply letterhead ("ورق مروّس"): background image (digital) and safe-area margins so the
+ *  content sits in the blank middle of the official paper. */
+function applyLetterhead(page, lh) {
+  if (!lh || !lh.enabled) return;
+  page.classList.add('has-letterhead');
+  const m = lh.margins || {};
+  page.style.setProperty('--pad', `${m.side ?? 16}mm`);
+  page.style.paddingTop = `${m.top ?? 38}mm`;
+  page.style.paddingBottom = `${m.bottom ?? 26}mm`;
+  if (lh.showBackground && lh.imageDataUrl) {
+    page.style.backgroundImage = `url("${lh.imageDataUrl}")`;
+    page.style.backgroundSize = '100% 100%';
+    page.style.backgroundRepeat = 'no-repeat';
+    page.style.backgroundPosition = 'center';
+  }
 }
 
 function buildContext(invoice, template) {
@@ -71,6 +89,7 @@ function buildContext(invoice, template) {
     fonts: template.fonts || {},
     columns: template.columns || [],
     layout: template.layout || {},
+    letterhead: invoice.letterhead || null,
     qr: { content: invoice.qrContent, imageDataUrl: invoice.qrImageDataUrl },
     // formatting helpers (display-only)
     money, num, date, esc, tafqeet, tafqeetEn, toArabicDigits,
