@@ -13,6 +13,8 @@ import { Modal } from '../components/Modal.js';
 import { LogoUploader } from '../components/LogoUploader.js';
 import { QrInfo } from '../components/QrInfo.js';
 import { QrService } from '../services/QrService.js';
+import { money } from '../utils/format.js';
+import { tafqeet, tafqeetEn } from '../utils/tafqeet.js';
 
 export async function PreviewPage(params = {}) {
   const el = h('div', { class: 'max-w-6xl mx-auto px-4 py-6' });
@@ -33,6 +35,16 @@ export async function PreviewPage(params = {}) {
   let node = null;
   let editing = false;
 
+  // Live-recalc totals on any edit while in edit mode. (For a contenteditable root the input
+  // event targets the root, not the cell, so we recalc on any input — it just re-reads the item
+  // cells; editing non-numeric text leaves totals unchanged.) Coalesced via rAF.
+  let recalcQueued = false;
+  stage.addEventListener('input', () => {
+    if (!editing || recalcQueued) return;
+    recalcQueued = true;
+    requestAnimationFrame(() => { recalcQueued = false; recalc(); });
+  });
+
   function render() {
     clear(stage);
     node = TemplateEngine.render(invoice, template);
@@ -48,8 +60,52 @@ export async function PreviewPage(params = {}) {
     node.setAttribute('contenteditable', editing ? 'true' : 'false');
     node.classList.toggle('is-editing', editing);
     node.spellcheck = false;
-    // keep images/QR/logo non-editable so layout isn't broken
     node.querySelectorAll('img').forEach((im) => { im.setAttribute('contenteditable', 'false'); im.draggable = false; });
+    // computed cells (line subtotals, totals, tax rate) are never directly editable
+    node.querySelectorAll('[data-ro]').forEach((el) => el.setAttribute('contenteditable', 'false'));
+  }
+
+  // Parse a displayed number (handles Arabic-Indic digits, commas, %, currency text).
+  function parseNum(t) {
+    const s = String(t ?? '').replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[^\d.\-]/g, '');
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+
+  // Recalculate line subtotals + invoice totals in place from the edited item cells.
+  // Updates only tagged cells, so all other inline edits are preserved.
+  function recalc() {
+    if (!node) return;
+    const indices = [...new Set([...node.querySelectorAll('[data-item]')].map((e) => e.getAttribute('data-item')))];
+    let gross = 0, disc = 0, tax = 0;
+    indices.forEach((i) => {
+      const cell = (sel) => node.querySelector(`[data-item="${i}"][${sel}]`);
+      const qty = parseNum(cell('data-k="qty"')?.textContent);
+      const price = parseNum(cell('data-k="unitPrice"')?.textContent);
+      const d = parseNum(cell('data-k="discount"')?.textContent);
+      const rateCell = cell('data-k="taxRate"');
+      const rate = rateCell ? parseNum(rateCell.textContent) / 100 : 0.15;
+      const lineGross = qty * price, lineNet = lineGross - d, lineTax = lineNet * rate, lineTotal = lineNet + lineTax;
+      gross += lineGross; disc += d; tax += lineTax;
+      const setCalc = (k, v) => { const el = node.querySelector(`[data-item="${i}"][data-calc="${k}"]`); if (el) el.textContent = money(v, false); };
+      setCalc('subtotal', lineNet); setCalc('subtotalExcl', lineNet);
+      setCalc('taxAmount', lineTax); setCalc('subtotalIncl', lineTotal); setCalc('total', lineTotal);
+      // keep the model in sync (so export/store reflect edits; original totals no longer apply)
+      if (invoice.items[i]) { invoice.items[i].qty = qty; invoice.items[i].unitPrice = price; invoice.items[i].discount = d; }
+    });
+    const net = gross - disc, grand = net + tax;
+    invoice.originalTotals = null;
+    const totals = { gross, net, taxable: net, subtotal: net, discount: disc, tax, grand };
+    node.querySelectorAll('[data-total]').forEach((el) => {
+      const key = el.getAttribute('data-total');
+      if (!(key in totals)) return;
+      const plain = el.getAttribute('data-money') === 'plain';
+      let s = plain ? money(totals[key], false) : money(totals[key]);
+      if (el.getAttribute('data-neg') === '1') s = `- ${s}`;
+      el.textContent = s;
+    });
+    node.querySelectorAll('[data-total-words="en"]').forEach((el) => { el.textContent = tafqeetEn(grand); });
+    node.querySelectorAll('[data-total-words="ar"]').forEach((el) => { el.textContent = tafqeet(grand); });
   }
 
   const viewBtn = (label, v) => h('button', { class: 'tab-btn', dataset: { v }, onClick: () => { view = v; sync(); render(); } }, label);

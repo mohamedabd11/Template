@@ -1,22 +1,29 @@
 /**
  * Totals block variants — different ways to present the summary/grand total.
- * Always reflects the invoice's (possibly original) figures; never recomputes source totals.
+ * Reflects the invoice's figures. Value elements carry data-total / data-total-words so the
+ * preview can live-recalculate them in place when items are edited (without re-rendering).
  */
 import { esc } from '../../../utils/dom.js';
 import { bl, blText, T } from '../labels.js';
 
+// Money <b> with recalc hooks. key drives live updates; data-money picks symbol vs plain.
+function mny(c, val, key, { sym = true, neg = false, tag = 'b', cls = '' } = {}) {
+  const text = (neg ? '- ' : '') + (sym ? c.money(val) : c.money(val, false));
+  const attrs = `data-total="${key}" data-money="${sym ? 'sym' : 'plain'}"${neg ? ' data-neg="1"' : ''}`;
+  return `<${tag} class="${cls}" ${attrs}>${text}</${tag}>`;
+}
+
 function lines(c) {
   const inv = c.invoice;
-  const rows = [
-    [bl('subtotal'), c.money(inv.subtotal)],
-    inv.discountTotal ? [bl('discount'), `- ${c.money(inv.discountTotal)}`] : null,
-    [bl('vat15'), c.money(inv.taxTotal)],
+  return [
+    [bl('subtotal'), inv.subtotal, 'net', false],
+    inv.discountTotal ? [bl('discount'), inv.discountTotal, 'discount', true] : null,
+    [bl('vat15'), inv.taxTotal, 'tax', false],
   ].filter(Boolean);
-  return rows;
 }
 
 function inWords(c) {
-  return `<div class="tot-words"><span>${blText('amountInWords')}:</span> ${esc(c.tafqeet(c.invoice.grandTotal))}</div>`;
+  return `<div class="tot-words"><span>${blText('amountInWords')}:</span> <span data-total-words="ar">${esc(c.tafqeet(c.invoice.grandTotal))}</span></div>`;
 }
 
 const DUE = bl('totalDue');
@@ -25,8 +32,8 @@ export const totalsBlocks = {
   // Boxed block aligned to the right with a highlighted grand-total row.
   'boxed-right': (c) => `
     <div class="tot tot--boxed">
-      ${lines(c).map(([k, v]) => `<div class="tot-line"><span>${k}</span><b>${v}</b></div>`).join('')}
-      <div class="tot-grand"><span>${DUE}</span><b>${c.money(c.invoice.grandTotal)}</b></div>
+      ${lines(c).map(([k, v, key, neg]) => `<div class="tot-line"><span>${k}</span>${mny(c, v, key, { neg })}</div>`).join('')}
+      <div class="tot-grand"><span>${DUE}</span>${mny(c, c.invoice.grandTotal, 'grand')}</div>
       ${inWords(c)}
     </div>`,
 
@@ -35,10 +42,10 @@ export const totalsBlocks = {
     <div class="tot tot--card">
       <div class="tot-card-grand">
         <div class="tot-card-label">${DUE}</div>
-        <div class="tot-card-value">${c.money(c.invoice.grandTotal)}</div>
+        <div class="tot-card-value">${mny(c, c.invoice.grandTotal, 'grand', { tag: 'span' })}</div>
       </div>
       <div class="tot-card-lines">
-        ${lines(c).map(([k, v]) => `<div class="tot-line"><span>${k}</span><b>${v}</b></div>`).join('')}
+        ${lines(c).map(([k, v, key, neg]) => `<div class="tot-line"><span>${k}</span>${mny(c, v, key, { neg })}</div>`).join('')}
       </div>
       ${inWords(c)}
     </div>`,
@@ -47,9 +54,9 @@ export const totalsBlocks = {
   'highlight-bar': (c) => `
     <div class="tot tot--bar">
       <div class="tot-bar-lines">
-        ${lines(c).map(([k, v]) => `<div class="tot-line"><span>${k}</span><b>${v}</b></div>`).join('')}
+        ${lines(c).map(([k, v, key, neg]) => `<div class="tot-line"><span>${k}</span>${mny(c, v, key, { neg })}</div>`).join('')}
       </div>
-      <div class="tot-bar-grand"><span>${DUE}</span><b>${c.money(c.invoice.grandTotal)}</b></div>
+      <div class="tot-bar-grand"><span>${DUE}</span>${mny(c, c.invoice.grandTotal, 'grand')}</div>
       ${inWords(c)}
     </div>`,
 
@@ -57,33 +64,34 @@ export const totalsBlocks = {
   ledger: (c) => `
     <div class="tot tot--ledger">
       <table>
-        ${lines(c).map(([k, v]) => `<tr><td>${k}</td><td class="tot-num">${v}</td></tr>`).join('')}
-        <tr class="tot-ledger-grand"><td>${DUE}</td><td class="tot-num">${c.money(c.invoice.grandTotal)}</td></tr>
+        ${lines(c).map(([k, v, key, neg]) => `<tr><td>${k}</td><td class="tot-num">${mny(c, v, key, { neg, tag: 'span' })}</td></tr>`).join('')}
+        <tr class="tot-ledger-grand"><td>${DUE}</td><td class="tot-num">${mny(c, c.invoice.grandTotal, 'grand', { tag: 'span' })}</td></tr>
       </table>
       ${inWords(c)}
     </div>`,
 
   // ZATCA statement: stacked bilingual bordered rows (Total / Discount / Taxable / VAT /
-  // Gross / Balance Due) with the amount in words.
+  // Gross / Balance Due) with the amount in words (English + Arabic).
   statement: (c) => {
     const inv = c.invoice;
-    const taxable = inv.subtotal - inv.discountTotal;
+    // inv.subtotal is already net (after discount). "Total Amount" = gross (before discount).
+    const gross = inv.subtotal + inv.discountTotal;
     const rows = [
-      [T.totalAmount, c.money(inv.subtotal, false)],
-      [T.totalDiscount, c.money(inv.discountTotal, false)],
-      [T.taxableAmount, c.money(taxable, false)],
-      [T.vatTotalAmount, c.money(inv.taxTotal, false)],
-      [T.grossTotal, c.money(inv.grandTotal, false), 'is-gross'],
-      [T.balanceDue, c.money(inv.grandTotal, false), 'is-balance'],
+      [T.totalAmount, gross, 'gross'],
+      [T.totalDiscount, inv.discountTotal, 'discount'],
+      [T.taxableAmount, inv.subtotal, 'taxable'],
+      [T.vatTotalAmount, inv.taxTotal, 'tax'],
+      [T.grossTotal, inv.grandTotal, 'grand', 'is-gross'],
+      [T.balanceDue, inv.grandTotal, 'grand', 'is-balance'],
     ];
     return `
       <div class="tot tot--statement">
-        ${rows.map(([lbl, val, cls]) => `<div class="st-row ${cls || ''}">
+        ${rows.map(([lbl, val, key, cls]) => `<div class="st-row ${cls || ''}">
           <span class="st-en">${lbl[1]} (SAR)</span>
-          <span class="st-val">${val}</span>
+          <span class="st-val" data-total="${key}" data-money="plain">${c.money(val, false)}</span>
           <span class="st-ar">${lbl[0]} (ر.س)</span></div>`).join('')}
-        <div class="st-words"><span>Amount in words:</span> ${esc(c.tafqeetEn(inv.grandTotal))}</div>
-        <div class="st-words st-words--ar"><span>${T.amountInWords[0]}:</span> ${esc(c.tafqeet(inv.grandTotal))}</div>
+        <div class="st-words"><span>Amount in words:</span> <span data-total-words="en">${esc(c.tafqeetEn(inv.grandTotal))}</span></div>
+        <div class="st-words st-words--ar"><span>${T.amountInWords[0]}:</span> <span data-total-words="ar">${esc(c.tafqeet(inv.grandTotal))}</span></div>
       </div>`;
   },
 
@@ -91,8 +99,8 @@ export const totalsBlocks = {
   'gold-frame': (c) => `
     <div class="tot tot--gold">
       <div class="tot-gold-inner">
-        ${lines(c).map(([k, v]) => `<div class="tot-line"><span>${k}</span><b>${v}</b></div>`).join('')}
-        <div class="tot-grand"><span>${DUE}</span><b>${c.money(c.invoice.grandTotal)}</b></div>
+        ${lines(c).map(([k, v, key, neg]) => `<div class="tot-line"><span>${k}</span>${mny(c, v, key, { neg })}</div>`).join('')}
+        <div class="tot-grand"><span>${DUE}</span>${mny(c, c.invoice.grandTotal, 'grand')}</div>
       </div>
       ${inWords(c)}
     </div>`,

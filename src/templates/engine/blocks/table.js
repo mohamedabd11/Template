@@ -23,10 +23,21 @@ function cellValue(col, item, idx, c) {
   }
 }
 
+const EDITABLE = new Set(['description', 'code', 'unit', 'qty', 'unitPrice', 'discount']);
+const COMPUTED = new Set(['subtotal', 'subtotalExcl', 'taxAmount', 'subtotalIncl', 'total']);
+
+/** Per-cell data attributes that let the live recalculation read/write the right values. */
+function cellAttrs(col, idx) {
+  if (EDITABLE.has(col.key)) return ` data-item="${idx}" data-k="${col.key}"`;
+  if (COMPUTED.has(col.key)) return ` data-item="${idx}" data-calc="${col.key}" data-ro="1"`;
+  if (col.key === 'taxRate') return ` data-item="${idx}" data-k="taxRate" data-ro="1"`;
+  return ' data-ro="1"'; // index, etc. — never editable
+}
+
 function buildRows(c, rowClassFn = () => '') {
   return c.invoice.items.map((item, i) => `
     <tr class="${rowClassFn(i)}">
-      ${c.columns.map((col) => `<td style="text-align:${col.align || 'right'}">${cellValue(col, item, i, c)}</td>`).join('')}
+      ${c.columns.map((col) => `<td style="text-align:${col.align || 'right'}"${cellAttrs(col, i)}>${cellValue(col, item, i, c)}</td>`).join('')}
     </tr>`).join('');
 }
 
