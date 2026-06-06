@@ -258,10 +258,10 @@ export async function PreviewPage(params = {}) {
         h('button', { class: 'btn-secondary', onClick: openBankDialog }, '🏦 تفاصيل البنك'),
         h('button', { class: 'btn-secondary', onClick: openLetterheadDialog }, '🧾 ورق مروّس'),
         h('button', { class: 'btn-secondary', onClick: () => ExportService.print(pages()) }, '🖨️ طباعة'),
-        h('button', { class: 'btn-primary', onClick: async () => {
-          toast('جارٍ إنشاء PDF…'); try { await ExportService.toPdf(pages(), `${invoice.invoiceNumber || 'invoice'}.pdf`); toast('تم تنزيل PDF', 'success'); }
-          catch (e) { toast('تعذر التصدير: ' + e.message, 'error'); }
-        } }, '⬇️ تنزيل PDF'),
+        h('button', { class: 'btn-primary', onClick: () => {
+          ExportService.toPdf(pages(), `${invoice.invoiceNumber || 'invoice'}.pdf`);
+          toast('من نافذة الطباعة اختر «حفظ كـ PDF / Save as PDF»', 'info');
+        } }, '⬇️ حفظ PDF'),
       ),
     ),
     stage,
